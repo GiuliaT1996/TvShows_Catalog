@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "898509344175",
+    "project_id": "game-catalog-cde1d",
+    "storage_bucket": "game-catalog-cde1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898509344175:android:56115a389ca2e4ffdf735a",
+        "android_client_info": {
+          "package_name": "com.angiuprojects.gamecatalog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898509344175-dag4tb81edm1bgidee0j6ourtpet95nv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4QY8Ou1PjUOgP_cxeTIL8Wemq0splPk4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898509344175-dag4tb81edm1bgidee0j6ourtpet95nv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

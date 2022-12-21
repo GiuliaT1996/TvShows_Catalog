@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Game Catalog</string>
+    <string name="percentage">Caricamento %d%%</string>
+    <string name="real_appname">Shows Tracking App</string>
+    <string name="serie_tv">Serie TV</string>
+    <string name="anime">Anime</string>
+    <string name="manga">Manga</string>
+    <string name="example_completed">10/10</string>
+</resources>

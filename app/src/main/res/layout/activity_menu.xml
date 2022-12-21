@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MenuActivity">
+
+    <ImageButton
+        android:id="@+id/tv_show"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/icons8_netflix_desktop_app_100"
+        android:backgroundTint="@drawable/change_color"
+        android:scaleX="1.1"
+        android:scaleY="1.1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_show"
+        android:layout_alignStart="@+id/tv_show"
+        android:layout_alignEnd="@id/tv_show"
+        android:gravity="center"
+        android:text="@string/serie_tv"
+        android:textColor="@color/light_blue" />
+
+    <ImageButton
+        android:id="@+id/anime"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/tv_show"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/icons8_naruto_100"
+        android:backgroundTint="@drawable/change_color"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/anime"
+        android:layout_alignStart="@+id/anime"
+        android:layout_alignEnd="@id/anime"
+        android:gravity="center"
+        android:text="@string/anime"
+        android:textColor="@color/light_blue" />
+
+    <ImageButton
+        android:id="@+id/manga"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/anime"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/icons8_repository_100"
+        android:backgroundTint="@drawable/change_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manga"
+        android:layout_alignStart="@+id/manga"
+        android:layout_alignEnd="@id/manga"
+        android:gravity="center"
+        android:text="@string/manga"
+        android:textColor="@color/light_blue" />
+
+</RelativeLayout>
