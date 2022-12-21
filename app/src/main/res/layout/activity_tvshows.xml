@@ -23,6 +23,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
+        android:layout_above="@+id/add_button"
         android:layout_margin="20dp"/>
+
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/icons8_add_new_100"
+        android:backgroundTint="@color/light_blue" />
 
 </RelativeLayout>

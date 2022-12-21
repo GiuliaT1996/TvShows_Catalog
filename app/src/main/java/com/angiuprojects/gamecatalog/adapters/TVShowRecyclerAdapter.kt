@@ -62,7 +62,7 @@ class TVShowRecyclerAdapter(private val dataSet : MutableList<TVShow>, private v
             return "0/0"
         }
 
-        return "${seasonList.size}/$completedSeasons"
+        return "$completedSeasons/${seasonList.size}"
     }
 
     private fun setRecyclerAdapter(seasonList: MutableList<Season>, context: Context, recyclerView: RecyclerView) {

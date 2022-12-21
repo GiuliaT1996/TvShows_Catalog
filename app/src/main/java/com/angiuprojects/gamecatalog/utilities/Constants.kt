@@ -33,7 +33,7 @@ class Constants {
     var tvShowDbReference: String = "TvShows"
     var tvShowPath: String = "name"
 
-    var tvShows: MutableList<TVShow>? = null
+    private var tvShows: MutableList<TVShow>? = null
 
     fun getInstanceTvShows(): MutableList<TVShow>? {
         if (tvShows == null) {
