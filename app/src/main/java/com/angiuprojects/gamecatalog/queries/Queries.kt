@@ -1,6 +1,7 @@
 package com.angiuprojects.gamecatalog.queries
 
 import android.util.Log
+import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.utilities.Constants
 import com.google.firebase.database.*
 
@@ -40,9 +41,9 @@ class Queries {
         })
     }
 
-    fun addUpdate(dbReference: String) {
+    fun addUpdate(dbReference: String, tvShow: TVShow) {
         myRef = Constants.getInstance().dbInstance.getReference(dbReference)
-        //TODO myRef.child(c.name).setValue(c)
+        myRef.child(tvShow.name).setValue(tvShow)
     }
 
     fun delete(dbReference: String) {

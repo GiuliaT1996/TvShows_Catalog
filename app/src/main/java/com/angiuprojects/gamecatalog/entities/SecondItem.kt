@@ -1,11 +1,10 @@
 package com.angiuprojects.gamecatalog.entities
 
-interface SecondItem<T> {
+interface SecondItem <T> {
 
-    var number : Int
-    var name : String
-    var episodes : MutableList<T>
+    var volumes : MutableList<T>
     var completed : Boolean
+    var name : String
 
     fun isCompleted(items: MutableList<T>) : Boolean
 }

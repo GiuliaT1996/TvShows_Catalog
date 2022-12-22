@@ -76,7 +76,6 @@ class LoadingActivity : AppCompatActivity() {
                         handler.post {
                             progressBar.progress = i
                             progressText!!.text = getString(R.string.percentage, i)
-
                         }
                         try {
                             Thread.sleep((animationLength - progressBarThreshold)/maxPercentage)
@@ -84,7 +83,6 @@ class LoadingActivity : AppCompatActivity() {
                             e.printStackTrace()
                         }
                     }
-
                 }.start()
             }
             override fun onAnimationEnd(animation: Animation) {

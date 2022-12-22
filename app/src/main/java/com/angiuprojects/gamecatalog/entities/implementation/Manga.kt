@@ -1,9 +1,9 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
-import com.angiuprojects.gamecatalog.entities.ThirdItem
+import com.angiuprojects.gamecatalog.entities.SecondItem
 import com.angiuprojects.gamecatalog.utilities.MangaStatusEnum
 
-class Manga : ThirdItem<Volume> {
+class Manga : SecondItem<Volume> {
 
     var status : MangaStatusEnum = MangaStatusEnum.IN_CORSO
     override var name : String = ""

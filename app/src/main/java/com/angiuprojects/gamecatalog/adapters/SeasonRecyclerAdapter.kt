@@ -6,31 +6,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.entities.implementation.Episode
 import com.angiuprojects.gamecatalog.entities.implementation.Season
+import com.angiuprojects.gamecatalog.entities.implementation.TVShow
+import com.angiuprojects.gamecatalog.queries.Queries
 import com.angiuprojects.gamecatalog.utilities.Constants
-import com.angiuprojects.gamecatalog.utilities.Utils
 
-class SeasonRecyclerAdapter(private val dataSet : MutableList<Season>, private val context: Context) : RecyclerView.Adapter<SeasonRecyclerAdapter.MyViewHolder>() {
+class SeasonRecyclerAdapter(private val dataSet : MutableList<Season>,
+                            private val parent: TVShow,
+                            private val parentRecyclerAdapter: TVShowRecyclerAdapter,
+                            private val position: Int,
+                            private val parentViewHolder: TVShowRecyclerAdapter.MyViewHolder)
+    : RecyclerView.Adapter<SeasonRecyclerAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var name: TextView
-        var expand: ImageButton
         var episodesCompleted: TextView
-        var episodes: RecyclerView
-        var layout: RelativeLayout
+        var plusButton: ImageButton
+        var minusButton: ImageButton
+        var progressBar: ProgressBar
 
         init {
             name = view.findViewById(R.id.name)
-            expand = view.findViewById(R.id.arrow)
             episodesCompleted = view.findViewById(R.id.episodes_completed)
-            episodes = view.findViewById(R.id.episodes_recycler_view)
-            layout = view.findViewById(R.id.season_view)
+            plusButton = view.findViewById(R.id.plus_button)
+            minusButton = view.findViewById(R.id.minus_button)
+            progressBar = view.findViewById(R.id.progress_bar)
         }
     }
 
@@ -45,41 +50,54 @@ class SeasonRecyclerAdapter(private val dataSet : MutableList<Season>, private v
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.name.text = dataSet[holder.adapterPosition].name
-        holder.expand.setOnClickListener{ Utils.getInstance().onClickExpandCollapse(holder.episodes, holder.expand)}
-        holder.episodesCompleted.text = populateCompletedEspisodes(dataSet[holder.adapterPosition].episodes)
+        val season = dataSet[holder.adapterPosition]
 
-        holder.episodes.visibility = View.GONE
-        setRecyclerAdapter(dataSet[holder.adapterPosition].episodes, context, holder.episodes)
+        holder.name.text = season.name
+        setProgressBar(holder, dataSet[holder.adapterPosition])
+                holder.plusButton.setOnClickListener{plus(holder)}
+        holder.minusButton.setOnClickListener{minus(holder)}
     }
 
-    private fun populateCompletedEspisodes(episodeList: MutableList<Episode>) : String {
-        var completedEpisodes = 0
+    private fun plus(holder: MyViewHolder) {
+        if(dataSet[holder.adapterPosition].seenEpisodes == dataSet[holder.adapterPosition].totalEpisodes) {
+            Log.i(Constants.getInstance().logger, "Non è più possibile aggiungere episodi visti")
+            return
+        }
+        dataSet[holder.adapterPosition].seenEpisodes++
+        setProgressBar(holder, dataSet[holder.adapterPosition])
+        Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, parent)
 
-        try {
-            episodeList.forEach{
-                if(it.seenOrRead) completedEpisodes++
-            }
-        } catch (e: Exception) {
-            Log.e(Constants.getInstance().logger, "La lista degli episodi è vuota o nulla. ${e.message}")
-            return "0/0"
+        if(dataSet[holder.adapterPosition].seenEpisodes == dataSet[holder.adapterPosition].totalEpisodes)
+            updateParent(parentViewHolder)
+    }
+
+    private fun minus(holder: MyViewHolder) {
+        if(dataSet[holder.adapterPosition].seenEpisodes == 0) {
+            Log.i(Constants.getInstance().logger, "Non è più possibile rimuovere episodi visti")
+            return
         }
 
-        return "$completedEpisodes/${episodeList.size}"
+        dataSet[holder.adapterPosition].seenEpisodes--
+        setProgressBar(holder, dataSet[holder.adapterPosition])
+        Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, parent)
+
+        if(dataSet[holder.adapterPosition].seenEpisodes == dataSet[holder.adapterPosition].totalEpisodes - 1)
+            updateParent(parentViewHolder)
     }
 
-    private fun setRecyclerAdapter(episodeList: MutableList<Episode>, context: Context, recyclerView: RecyclerView) {
-
-        val adapter = EpisodeRecyclerAdapter(episodeList, context)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = adapter
-
-        //swipeToDelete(cardList, adapter)
+    private fun updateParent(holder: TVShowRecyclerAdapter.MyViewHolder){
+        parentRecyclerAdapter.updateCompletedSeasons(position = position, holder)
     }
 
+    private fun setProgressBar(holder: MyViewHolder, season: Season) {
+        holder.episodesCompleted.text = buildString {
+            append(season.seenEpisodes)
+            append("/")
+            append(season.totalEpisodes)
+        }
+
+        holder.progressBar.progress = (season.seenEpisodes * 100) / season.totalEpisodes
+    }
 
     override fun getItemCount() = dataSet.size
 }

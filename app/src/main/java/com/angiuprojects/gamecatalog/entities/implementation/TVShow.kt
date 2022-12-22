@@ -1,12 +1,14 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
-import com.angiuprojects.gamecatalog.entities.ThirdItem
+import com.angiuprojects.gamecatalog.entities.SecondItem
 
-class TVShow : ThirdItem<Season> {
+class TVShow : SecondItem<Season> {
 
     override var name : String = ""
     override var volumes : MutableList<Season> = mutableListOf()
     override var completed: Boolean = false
+
+    constructor()
 
     constructor(name: String, seasons: MutableList<Season>) {
         this.name = name

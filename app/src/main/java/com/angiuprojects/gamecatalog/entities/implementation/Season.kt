@@ -1,22 +1,26 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
-import com.angiuprojects.gamecatalog.entities.SecondItem
+import com.angiuprojects.gamecatalog.entities.FirstItem
 
-class Season : SecondItem<Episode> {
+class Season : FirstItem {
 
     override var completed: Boolean = false
     override var number: Int = 0
-    override var episodes: MutableList<Episode> = mutableListOf()
+    override var seenEpisodes: Int = 0
+    override var totalEpisodes: Int = 0
     override var name: String = ""
 
-    constructor(number: Int, name: String, episodes: MutableList<Episode>) {
+    constructor()
+
+    constructor(number: Int, seenEpisodes: Int, totalEpisodes: Int) {
         this.number = number
-        this.name = name
-        this.episodes = episodes
-        this.completed = isCompleted(episodes)
+        this.name = "Stagione $number"
+        this.seenEpisodes = seenEpisodes
+        this.totalEpisodes = totalEpisodes
+        this.completed = isCompleted(seenEpisodes, totalEpisodes)
     }
 
-    override fun isCompleted(items: MutableList<Episode>): Boolean {
-        return !items.any { x -> !x.seenOrRead }
+    override fun isCompleted(seen: Int, total: Int): Boolean {
+        return seen == total
     }
 }

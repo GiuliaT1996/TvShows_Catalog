@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_alignParentStart="true"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_toStartOf="@+id/seasons_completed"
         android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="10sp"
@@ -26,15 +29,31 @@
         android:backgroundTint="@drawable/change_color"
         android:background="@drawable/icons8_simple_arrow_50" />
 
+    <ImageView
+        android:id="@+id/completed"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_toStartOf="@+id/arrow"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/icons8_checkmark_100__1_"
+        android:backgroundTint="@color/grey"/>
+
+    <ImageView
+        android:id="@+id/not_completed"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_toStartOf="@+id/arrow"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/icons8_checkmark_100" />
+
     <TextView
         android:id="@+id/seasons_completed"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_toStartOf="@+id/arrow"
+        android:layout_toStartOf="@+id/not_completed"
         android:text="@string/example_completed" />
 
     <androidx.recyclerview.widget.RecyclerView
