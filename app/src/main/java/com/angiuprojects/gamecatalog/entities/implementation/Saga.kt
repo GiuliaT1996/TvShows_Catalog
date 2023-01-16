@@ -7,6 +7,8 @@ class Saga  : SecondItem<Season> {
     override var volumes : MutableList<Season> = mutableListOf()
     override var completed: Boolean = false
 
+    constructor()
+
     constructor(name: String, seasons: MutableList<Season>) {
         this.name = name
         this.volumes = seasons

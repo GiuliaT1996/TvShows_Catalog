@@ -6,4 +6,17 @@
     <string name="anime">Anime</string>
     <string name="manga">Manga</string>
     <string name="example_completed">10/10</string>
+    <string name="nome">Nome</string>
+    <string name="stagioni">Stagioni:</string>
+    <string name="aggiungi">Aggiungi</string>
+    <string name="episodi_visti">Episodi visti</string>
+    <string name="episodi_totali">Episodi totali</string>
+    <string name="aggiungi_stagione">Aggiungi stagione</string>
+    <string name="sfondo">Sfondo</string>
+    <string name="eliminare_stagione">Eliminare stagione?</string>
+    <string name="no">No</string>
+    <string name="si">Si</string>
+    <string name="rimuovi_serie">Rimuovi serie</string>
+    <string name="aggiorna_serie">Aggiorna</string>
+    <string name="modifica_stagione">Modifica Stagione</string>
 </resources>

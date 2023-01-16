@@ -6,6 +6,8 @@ class Anime {
     var sagas: MutableList<Saga> = mutableListOf()
     var completed : Boolean = false
 
+    constructor()
+
     constructor(sagas: MutableList<Saga>) {
         hasSaga = true
         this.sagas = sagas

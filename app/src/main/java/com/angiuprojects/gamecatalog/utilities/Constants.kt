@@ -9,15 +9,15 @@ class Constants {
 
     companion object {
 
-        private lateinit var constantsIstance: Constants
+        private lateinit var constantsInstance: Constants
 
         fun initializeConstantSingleton(): Constants {
-            constantsIstance = Constants()
-            return constantsIstance
+            constantsInstance = Constants()
+            return constantsInstance
         }
 
         fun getInstance(): Constants {
-            return constantsIstance
+            return constantsInstance
         }
     }
 
@@ -85,4 +85,12 @@ class Constants {
     /**
      * MANGA CONSTANTS -- END
      */
+
+    /**
+     * POP UP ACTIONS
+     */
+
+    val deleteShow = "Delete Show"
+    val deleteSeason = "Delete Season"
+    val completePreviousSeasons = "Complete Previous Seasons"
 }

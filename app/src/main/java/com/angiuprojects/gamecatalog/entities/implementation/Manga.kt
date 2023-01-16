@@ -10,6 +10,8 @@ class Manga : SecondItem<Volume> {
     override var volumes : MutableList<Volume> = mutableListOf()
     override var completed: Boolean = false
 
+    constructor()
+
     constructor(name: String, volumes: MutableList<Volume>, status: MangaStatusEnum) {
         this.name = name
         this.volumes = volumes

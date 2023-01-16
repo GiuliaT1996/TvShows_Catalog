@@ -2,21 +2,22 @@ package com.angiuprojects.gamecatalog.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.adapters.TVShowRecyclerAdapter
-import com.angiuprojects.gamecatalog.entities.implementation.Season
 import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.Utils
 
 class TVShowsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tvshows)
-
-        addTvShow()
-        Constants.getInstance().getInstanceTvShows()?.let { setRecyclerAdapter(it) }
+        val list = Constants.getInstance().getInstanceTvShows()?.sortedBy { it.name }?.toMutableList()
+        list?.let { setRecyclerAdapter(it) }
+        findViewById<ImageButton>(R.id.add_button).setOnClickListener{addTVShow()}
     }
 
     private fun setRecyclerAdapter(tvShowList: MutableList<TVShow>) {
@@ -32,11 +33,7 @@ class TVShowsActivity : AppCompatActivity() {
         //swipeToDelete(cardList, adapter)
     }
 
-    private fun addTvShow() {
-
-        val season1 = Season(1, 2, 8)
-        val tvShow = TVShow("Wednesday", mutableListOf(season1))
-
-        Constants.getInstance().getInstanceTvShows()?.add(tvShow)
+    private fun addTVShow() {
+        Utils.getInstance().onClickChangeActivity(AddActivity::class.java, this, true)
     }
 }

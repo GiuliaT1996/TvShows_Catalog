@@ -1,10 +1,10 @@
 package com.angiuprojects.gamecatalog.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import com.angiuprojects.gamecatalog.R
+import com.angiuprojects.gamecatalog.utilities.Utils
 
 class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,15 +15,10 @@ class MenuActivity : AppCompatActivity() {
 
     private fun setOnClickMethods() {
         val tvShowsButton : ImageButton = findViewById(R.id.tv_show)
-        tvShowsButton.setOnClickListener{onClickChangeActivity(TVShowsActivity::class.java)}
+        tvShowsButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(TVShowsActivity::class.java, this, false)}
 
         var animeButton : ImageButton = findViewById(R.id.anime)
 
         var mangaButton : ImageButton = findViewById(R.id.manga)
-    }
-
-    private fun <T> onClickChangeActivity(activity: Class<T>) {
-        val intent = Intent(this, activity)
-        startActivity(intent)
     }
 }

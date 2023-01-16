@@ -10,11 +10,11 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginTop="20dp"
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeMinTextSize="20sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:layout_marginTop="20dp"
         android:text="@string/serie_tv"
         android:textAllCaps="true" />
 
@@ -32,8 +32,11 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/icons8_add_new_100"
-        android:backgroundTint="@color/light_blue" />
+        android:backgroundTint="@drawable/change_color" />
 
 </RelativeLayout>

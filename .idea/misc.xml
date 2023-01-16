@@ -6,12 +6,19 @@
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/drawable/change_color.xml" value="0.2595" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/drawable/custom_progressbar.xml" value="0.124" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/drawable/customprogressbar.xml" value="0.124" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/drawable/round_background.xml" value="0.123" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/drawable/round_button.xml" value="0.105" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/activity_add.xml" value="0.2" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/activity_loading.xml" value="0.264" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/activity_menu.xml" value="0.2" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/activity_tvshows.xml" value="0.22282608695652173" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/add_season_popup.xml" value="0.2" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/add_season_view.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/episode_view.xml" value="0.22282608695652173" />
         <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/season_view.xml" value="0.264" />
-        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/tv_show_view.xml" value="0.536" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/tv_show_view.xml" value="0.176" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/update_delete_show_popup.xml" value="0.264" />
+        <entry key="..\:/Users/Giulia.Tincano/AndroidStudioProjects/GameCatalog/app/src/main/res/layout/yes_no_message_popup.xml" value="0.2" />
       </map>
     </option>
   </component>

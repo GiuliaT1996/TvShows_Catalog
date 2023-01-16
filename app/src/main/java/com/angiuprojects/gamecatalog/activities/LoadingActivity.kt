@@ -20,7 +20,7 @@ import com.angiuprojects.gamecatalog.utilities.Utils
 
 class LoadingActivity : AppCompatActivity() {
 
-    private var animationLength : Long = 4000
+    private var animationLength : Long = 3000
     private var progressBarThreshold : Int = 500
     private var maxPercentage : Int = 100
 

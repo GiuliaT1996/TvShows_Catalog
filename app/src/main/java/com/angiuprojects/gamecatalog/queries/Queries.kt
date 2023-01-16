@@ -46,8 +46,8 @@ class Queries {
         myRef.child(tvShow.name).setValue(tvShow)
     }
 
-    fun delete(dbReference: String) {
+    fun delete(dbReference: String, tvShow: TVShow) {
         myRef = Constants.getInstance().dbInstance.getReference(dbReference)
-        //TODO myRef.child(c.name).removeValue()
+        myRef.child(tvShow.name).removeValue()
     }
 }
