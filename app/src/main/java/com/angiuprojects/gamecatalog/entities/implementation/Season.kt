@@ -1,14 +1,12 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
-import com.angiuprojects.gamecatalog.entities.FirstItem
+class Season {
 
-class Season : FirstItem {
-
-    override var completed: Boolean = false
-    override var number: Int = 0
-    override var seenEpisodes: Int = 0
-    override var totalEpisodes: Int = 0
-    override var name: String = ""
+    var completed: Boolean = false
+    var number: Int = 0
+    var seenEpisodes: Int = 0
+    var totalEpisodes: Int = 0
+    var name: String = ""
 
     constructor()
 
@@ -20,7 +18,7 @@ class Season : FirstItem {
         this.completed = isCompleted(seenEpisodes, totalEpisodes)
     }
 
-    override fun isCompleted(seen: Int, total: Int): Boolean {
+    fun isCompleted(seen: Int, total: Int): Boolean {
         return seen == total
     }
 }

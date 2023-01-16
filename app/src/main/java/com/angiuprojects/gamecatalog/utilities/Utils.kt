@@ -118,7 +118,7 @@ class Utils {
         seasons.add(season)
 
         seasons.sortedBy { it.name }
-        parentTvShow?.volumes = seasons.sortedBy { it.name }.toMutableList()
+        parentTvShow?.seasons = seasons.sortedBy { it.name }.toMutableList()
 
         if(parentTvShow != null) Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, parentTvShow)
 

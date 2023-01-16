@@ -2,17 +2,17 @@ package com.angiuprojects.gamecatalog.entities.implementation
 
 import com.angiuprojects.gamecatalog.entities.SecondItem
 
-class TVShow : SecondItem<Season> {
+class TVShow : SecondItem {
 
     override var name : String = ""
-    override var volumes : MutableList<Season> = mutableListOf()
+    override var seasons : MutableList<Season> = mutableListOf()
     override var completed: Boolean = false
 
     constructor()
 
     constructor(name: String, seasons: MutableList<Season>) {
         this.name = name
-        this.volumes = seasons
+        this.seasons = seasons
         completed = isCompleted(seasons)
     }
 

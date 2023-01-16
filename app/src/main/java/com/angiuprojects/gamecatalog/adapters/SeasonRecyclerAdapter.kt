@@ -114,7 +114,7 @@ class SeasonRecyclerAdapter(private val dataSet : MutableList<Season>,
             updateParent()
         }
 
-        parent.volumes = dataSet
+        parent.seasons = dataSet
         Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, parent)
 
         notifyItemChanged(position)

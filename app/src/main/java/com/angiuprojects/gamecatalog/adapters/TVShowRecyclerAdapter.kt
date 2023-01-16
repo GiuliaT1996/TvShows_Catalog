@@ -54,7 +54,7 @@ class TVShowRecyclerAdapter(private val dataSet : MutableList<TVShow>, private v
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.name.text = dataSet[holder.adapterPosition].name
         holder.expand.setOnClickListener{Utils.getInstance().onClickExpandCollapse(holder.seasons, holder.expand)}
-        holder.seasonsCompleted.text = populateCompletedSeasons(dataSet[holder.adapterPosition].volumes, holder)
+        holder.seasonsCompleted.text = populateCompletedSeasons(dataSet[holder.adapterPosition].seasons, holder)
 
         holder.seasons.visibility = View.GONE
         setRecyclerAdapter(dataSet[holder.adapterPosition], context, holder.seasons, holder.adapterPosition, holder)
@@ -70,7 +70,7 @@ class TVShowRecyclerAdapter(private val dataSet : MutableList<TVShow>, private v
     }
 
     fun deleteLastSeason(position: Int) {
-        dataSet[position].volumes.removeAt(dataSet[position].volumes.size - 1)
+        dataSet[position].seasons.removeAt(dataSet[position].seasons.size - 1)
         Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, dataSet[position])
         this.notifyItemChanged(position)
     }
@@ -133,7 +133,7 @@ class TVShowRecyclerAdapter(private val dataSet : MutableList<TVShow>, private v
 
     private fun setRecyclerAdapter(tvShow: TVShow, context: Context, recyclerView: RecyclerView, position: Int, holder: MyViewHolder) {
 
-        val adapter = SeasonRecyclerAdapter(tvShow.volumes, tvShow, this, position, holder, context)
+        val adapter = SeasonRecyclerAdapter(tvShow.seasons, tvShow, this, position, holder, context)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 

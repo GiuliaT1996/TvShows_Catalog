@@ -3,23 +3,23 @@ package com.angiuprojects.gamecatalog.entities.implementation
 import com.angiuprojects.gamecatalog.entities.SecondItem
 import com.angiuprojects.gamecatalog.utilities.MangaStatusEnum
 
-class Manga : SecondItem<Volume> {
+class Manga : SecondItem {
 
     var status : MangaStatusEnum = MangaStatusEnum.IN_CORSO
     override var name : String = ""
-    override var volumes : MutableList<Volume> = mutableListOf()
+    override var seasons : MutableList<Season> = mutableListOf()
     override var completed: Boolean = false
 
     constructor()
 
-    constructor(name: String, volumes: MutableList<Volume>, status: MangaStatusEnum) {
+    constructor(name: String, seasons: MutableList<Season>, status: MangaStatusEnum) {
         this.name = name
-        this.volumes = volumes
+        this.seasons = seasons
         this.status = status
-        completed = isCompleted(volumes)
+        completed = isCompleted(seasons)
     }
 
-    override fun isCompleted (items: MutableList<Volume>) : Boolean {
+    override fun isCompleted (items: MutableList<Season>) : Boolean {
         return !items.any { x -> !x.completed }
     }
 }
