@@ -2,7 +2,7 @@ package com.angiuprojects.gamecatalog.entities
 
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 
-interface SecondItem {
+interface MainItem {
 
     var seasons : MutableList<Season>
     var completed : Boolean

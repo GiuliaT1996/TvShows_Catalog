@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
+import com.angiuprojects.gamecatalog.adapters.TvShowSeasonRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.TVShowRecyclerAdapter
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 import com.angiuprojects.gamecatalog.entities.implementation.TVShow
@@ -142,7 +142,7 @@ class Utils {
         if(parentTvShow != null
             && parentRecyclerAdapter != null
             && position != null
-            && parentViewHolder != null)  recyclerView.adapter = SeasonRecyclerAdapter(seasons, parentTvShow, parentRecyclerAdapter, position, parentViewHolder, context)
+            && parentViewHolder != null)  recyclerView.adapter = TvShowSeasonRecyclerAdapter(seasons, parentTvShow, parentRecyclerAdapter, position, parentViewHolder, context)
         else recyclerView.adapter = AddSeasonRecyclerAdapter(seasons)
 
     }

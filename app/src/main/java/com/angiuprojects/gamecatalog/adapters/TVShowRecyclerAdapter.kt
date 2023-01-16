@@ -133,7 +133,7 @@ class TVShowRecyclerAdapter(private val dataSet : MutableList<TVShow>, private v
 
     private fun setRecyclerAdapter(tvShow: TVShow, context: Context, recyclerView: RecyclerView, position: Int, holder: MyViewHolder) {
 
-        val adapter = SeasonRecyclerAdapter(tvShow.seasons, tvShow, this, position, holder, context)
+        val adapter = TvShowSeasonRecyclerAdapter(tvShow.seasons, tvShow, this, position, holder, context)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 

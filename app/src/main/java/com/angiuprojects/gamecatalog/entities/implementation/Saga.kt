@@ -1,8 +1,8 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
-import com.angiuprojects.gamecatalog.entities.SecondItem
+import com.angiuprojects.gamecatalog.entities.MainItem
 
-class Saga  : SecondItem {
+class Saga  : MainItem {
     override var name : String = ""
     override var seasons : MutableList<Season> = mutableListOf()
     override var completed: Boolean = false
