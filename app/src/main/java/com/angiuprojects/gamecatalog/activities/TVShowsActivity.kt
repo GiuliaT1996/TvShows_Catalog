@@ -29,8 +29,6 @@ class TVShowsActivity : AppCompatActivity() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
-
-        //swipeToDelete(cardList, adapter)
     }
 
     private fun addTVShow() {
