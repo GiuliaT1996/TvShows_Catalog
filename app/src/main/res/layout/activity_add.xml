@@ -42,9 +42,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/season_name"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_below="@+id/name_input_text"
+        android:layout_below="@+id/status_dropdown"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
@@ -58,7 +59,7 @@
         android:id="@+id/add_season"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_below="@+id/name_input_text"
+        android:layout_below="@+id/status_dropdown"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="30dp"
@@ -87,5 +88,38 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/round_button"
         android:text="@string/aggiungi" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/status_dropdown"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerHorizontal="true"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        android:layout_below="@+id/name_input_text"
+        android:layout_marginTop="20dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/light_blue"
+        app:endIconTint="@color/transparent"
+        android:textColorHint="@color/light_blue"
+        android:visibility="gone"
+        android:clickable="true">
+
+        <AutoCompleteTextView
+            android:id="@+id/status_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            android:textColor="@color/light_blue"
+            android:ellipsize="end"
+            tools:text="Status"
+            android:backgroundTint="@color/transparent"
+            android:maxLines="1"
+            android:singleLine="true"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </RelativeLayout>

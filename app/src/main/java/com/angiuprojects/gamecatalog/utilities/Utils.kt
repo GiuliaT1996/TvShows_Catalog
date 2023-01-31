@@ -8,20 +8,17 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.TvShowSeasonRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.TVShowRecyclerAdapter
+import com.angiuprojects.gamecatalog.adapters.MainItemRecyclerAdapter
+import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
+import com.angiuprojects.gamecatalog.entities.MainItem
 import com.angiuprojects.gamecatalog.entities.implementation.Season
-import com.angiuprojects.gamecatalog.entities.implementation.TVShow
-import com.angiuprojects.gamecatalog.queries.Queries
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -52,9 +49,10 @@ class Utils {
         }
     }
 
-    fun <T> onClickChangeActivity(activity: Class<T>, context: Context, closePrevious: Boolean) {
+    fun <T> onClickChangeActivity(activity: Class<T>, context: Context, closePrevious: Boolean, showType: String) {
         if(context is Activity && closePrevious) context.finish()
         val intent = Intent(context, activity)
+        intent.putExtra("showType", showType)
         context.startActivity(intent)
     }
 
@@ -62,32 +60,33 @@ class Utils {
                                   seasons: MutableList<Season>,
                                   recyclerView: RecyclerView,
                                   snackBarView: View,
-                                  parentTvShow: TVShow?,
-                                  parentRecyclerAdapter: TVShowRecyclerAdapter?,
+                                  showTypeEnum: ShowTypeEnum,
+                                  parentMainItem: MainItem?,
+                                  parentRecyclerAdapter: MainItemRecyclerAdapter?,
                                   position: Int?,
-                                  parentViewHolder: TVShowRecyclerAdapter.MyViewHolder?) : Boolean {
+                                  parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?) {
 
+        val popUpView = openAddEditSeasonPopUp(dialog, buildString {
+            append("Stagione ")
+            append(seasons.size + 1)
+        })
+
+        popUpView.findViewById<Button>(R.id.add_season).setOnClickListener{ onClickAddSeason(popUpView, dialog, seasons, recyclerView, snackBarView,
+            parentMainItem, parentRecyclerAdapter, position, parentViewHolder, showTypeEnum) }
+    }
+
+    fun openAddEditSeasonPopUp(dialog: Dialog, seasonName: String) : View {
         val inflater = dialog.context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popUpView: View = inflater.inflate(R.layout.add_season_popup, null)
         dialog.setContentView(popUpView)
 
-        val name = popUpView.findViewById<TextView>(R.id.number_input_text)
-
-        name.text = buildString {
-            append("Stagione ")
-            append(seasons.size + 1)
-        }
-
-        val addSeasonButton = popUpView.findViewById<Button>(R.id.add_season)
-        addSeasonButton.setOnClickListener{ onClickAddSeason(popUpView, dialog, seasons, recyclerView, snackBarView,
-            parentTvShow, parentRecyclerAdapter, position, parentViewHolder) }
+        popUpView.findViewById<TextView>(R.id.number_input_text).text = seasonName
 
         popUpView.findViewById<ImageButton>(R.id.close_button).setOnClickListener{dialog.dismiss()}
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
-
-        return true
+        return popUpView
     }
 
     private fun onClickAddSeason(popUpView: View,
@@ -95,10 +94,11 @@ class Utils {
                                  seasons: MutableList<Season>,
                                  recyclerView: RecyclerView,
                                  snackBarView: View,
-                                 parentTvShow: TVShow?,
-                                 parentRecyclerAdapter: TVShowRecyclerAdapter?,
+                                 parentMainItem: MainItem?,
+                                 parentRecyclerAdapter: MainItemRecyclerAdapter?,
                                  position: Int?,
-                                 parentViewHolder: TVShowRecyclerAdapter.MyViewHolder?) {
+                                 parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
+                                 showTypeEnum: ShowTypeEnum) {
 
         var seenEpisodes = 0
         var totalEpisodes = 0
@@ -118,31 +118,34 @@ class Utils {
         seasons.add(season)
 
         seasons.sortedBy { it.name }
-        parentTvShow?.seasons = seasons.sortedBy { it.name }.toMutableList()
+        parentMainItem?.seasons = seasons.sortedBy { it.name }.toMutableList()
 
-        if(parentTvShow != null) Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, parentTvShow)
-
-        setRecyclerAdapter(seasons, dialog.context, recyclerView, parentTvShow, parentRecyclerAdapter, position, parentViewHolder)
+        setSeasonRecyclerAdapter(seasons, dialog.context, recyclerView, parentMainItem,
+            parentRecyclerAdapter, position, parentViewHolder, showTypeEnum)
         dialog.dismiss()
     }
 
-    private fun setRecyclerAdapter(seasons: MutableList<Season>,
-                                   context: Context,
-                                   recyclerView: RecyclerView,
-                                   parentTvShow: TVShow?,
-                                   parentRecyclerAdapter: TVShowRecyclerAdapter?,
-                                   position: Int?,
-                                   parentViewHolder: TVShowRecyclerAdapter.MyViewHolder?) {
+    private fun setSeasonRecyclerAdapter(seasons: MutableList<Season>,
+                                         context: Context,
+                                         recyclerView: RecyclerView,
+                                         parentMainItem: MainItem?,
+                                         parentRecyclerAdapter: MainItemRecyclerAdapter?,
+                                         position: Int?,
+                                         parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
+                                         showTypeEnum: ShowTypeEnum) {
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
         recyclerView.setHasFixedSize(true)
 
-        if(parentTvShow != null
+        if(parentMainItem != null
             && parentRecyclerAdapter != null
             && position != null
-            && parentViewHolder != null)  recyclerView.adapter = TvShowSeasonRecyclerAdapter(seasons, parentTvShow, parentRecyclerAdapter, position, parentViewHolder, context)
+            && parentViewHolder != null) {
+            recyclerView.adapter = SeasonRecyclerAdapter(parentMainItem, parentRecyclerAdapter, position, parentViewHolder, context, showTypeEnum)
+            parentRecyclerAdapter.updateCompletedSeasons(parentViewHolder, parentMainItem.seasons)
+        }
         else recyclerView.adapter = AddSeasonRecyclerAdapter(seasons)
 
     }
@@ -157,5 +160,28 @@ class Utils {
             return true
         }
         return false
+    }
+
+    fun setMainItemRecyclerAdapter(itemList: MutableList<out MainItem>,
+    context: Context, recyclerView: RecyclerView, showTypeEnum: ShowTypeEnum) {
+
+        val adapter = MainItemRecyclerAdapter(itemList, context, showTypeEnum)
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = adapter
+    }
+
+    fun assignAdapterToSpinner(filterSpinner: AutoCompleteTextView, context: Context) {
+        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, MangaStatusEnum.getList())
+        filterSpinner.setAdapter(adapter)
+
+        filterSpinner.setDropDownBackgroundDrawable(
+            ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.round_background,
+                null
+            ))
     }
 }

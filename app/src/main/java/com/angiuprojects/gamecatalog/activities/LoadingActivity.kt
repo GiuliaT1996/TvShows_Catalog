@@ -11,16 +11,14 @@ import android.view.animation.Animation
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.entities.implementation.Anime
-import com.angiuprojects.gamecatalog.entities.implementation.Manga
-import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.queries.Queries
 import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class LoadingActivity : AppCompatActivity() {
 
-    private var animationLength : Long = 3000
+    private var animationLength : Long = 2000
     private var progressBarThreshold : Int = 500
     private var maxPercentage : Int = 100
 
@@ -28,7 +26,7 @@ class LoadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
         initializeSingletons()
-        populateLists()
+        Constants.user = ReadWriteJson.getInstance().getUser(this, false)
         animateImage(this)
     }
 
@@ -36,23 +34,7 @@ class LoadingActivity : AppCompatActivity() {
         Constants.initializeConstantSingleton()
         Queries.initializeQueriesSingleton()
         Utils.initializeUtilsSingleton()
-    }
-
-    private fun populateLists() {
-        Queries.getInstance().select(Constants.getInstance().tvShowDbReference,
-            Constants.getInstance().tvShowPath,
-            TVShow::class.java,
-            Constants.getInstance().getInstanceTvShows())
-
-        Queries.getInstance().select(Constants.getInstance().animeDbReference,
-            Constants.getInstance().animePath,
-            Anime::class.java,
-            Constants.getInstance().getInstanceAnime())
-
-        Queries.getInstance().select(Constants.getInstance().mangaDbReference,
-            Constants.getInstance().mangaPath,
-            Manga::class.java,
-            Constants.getInstance().getInstanceManga())
+        ReadWriteJson.initializeSingleton()
     }
 
     private fun animateImage(context: Context) {
@@ -92,5 +74,10 @@ class LoadingActivity : AppCompatActivity() {
 
             override fun onAnimationRepeat(animation: Animation) {}
         })
+    }
+
+    override fun onStop() {
+        ReadWriteJson.getInstance().write(this, false)
+        super.onStop()
     }
 }
