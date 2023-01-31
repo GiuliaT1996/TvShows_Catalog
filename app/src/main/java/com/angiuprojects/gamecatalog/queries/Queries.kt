@@ -1,8 +1,9 @@
 package com.angiuprojects.gamecatalog.queries
 
+import android.content.Context
 import android.util.Log
-import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
 import com.google.firebase.database.*
 
 class Queries {
@@ -22,32 +23,32 @@ class Queries {
         }
     }
 
-    fun <T> select(dbReference: String, path: String, tClass: Class<T>, itemList : MutableList<T>?) {
-        myRef = Constants.getInstance().dbInstance.getReference(dbReference)
-        myRef.orderByChild(path).addChildEventListener(object : ChildEventListener {
+    fun select(context: Context) {
+        myRef = Constants.getInstance().dbInstance.getReference(Constants.getInstance().dbReference)
+        myRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val item: T? = dataSnapshot.getValue(tClass)
+                val item: String? = dataSnapshot.getValue(String::class.java)
                 if (item != null) {
-                    Log.i(Constants.getInstance().logger, "Inserted item $item of type ${tClass.name}")
-                    itemList?.add(item)
+                    Log.i(Constants.logger, "Json: $item")
+                    ReadWriteJson.getInstance().getUser(context, false)
                 }
             }
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
             override fun onChildRemoved(snapshot: DataSnapshot) {}
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
             override fun onCancelled(error: DatabaseError) {
-                Log.e(Constants.getInstance().logger, error.message)
+                Log.e(Constants.logger, error.message)
             }
         })
     }
 
-    fun addUpdate(dbReference: String, tvShow: TVShow) {
-        myRef = Constants.getInstance().dbInstance.getReference(dbReference)
-        myRef.child(tvShow.name).setValue(tvShow)
+    fun addUpdate(json: String) {
+        myRef = Constants.getInstance().dbInstance.getReference(Constants.getInstance().dbReference)
+        myRef.setValue(json)
     }
 
-    fun delete(dbReference: String, tvShow: TVShow) {
-        myRef = Constants.getInstance().dbInstance.getReference(dbReference)
-        myRef.child(tvShow.name).removeValue()
+    fun delete(json: String) {
+        myRef = Constants.getInstance().dbInstance.getReference(Constants.getInstance().dbReference)
+        myRef.child(json).removeValue()
     }
 }

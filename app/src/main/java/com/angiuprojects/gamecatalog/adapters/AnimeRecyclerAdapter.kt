@@ -1,4 +1,4 @@
 package com.angiuprojects.gamecatalog.adapters
 
-class CommonCodeRecyclerAdapter {
+class AnimeRecyclerAdapter {
 }

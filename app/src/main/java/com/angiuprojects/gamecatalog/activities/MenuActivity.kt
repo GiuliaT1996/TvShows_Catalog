@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import com.angiuprojects.gamecatalog.R
+import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
+import com.angiuprojects.gamecatalog.utilities.ShowTypeEnum
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class MenuActivity : AppCompatActivity() {
@@ -15,10 +18,18 @@ class MenuActivity : AppCompatActivity() {
 
     private fun setOnClickMethods() {
         val tvShowsButton : ImageButton = findViewById(R.id.tv_show)
-        tvShowsButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(TVShowsActivity::class.java, this, false)}
+        tvShowsButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(TVShowsActivity::class.java, this,
+            false, ShowTypeEnum.TV_SHOW.toString())}
 
-        var animeButton : ImageButton = findViewById(R.id.anime)
+        val animeButton : ImageButton = findViewById(R.id.anime)
 
-        var mangaButton : ImageButton = findViewById(R.id.manga)
+        val mangaButton : ImageButton = findViewById(R.id.manga)
+        mangaButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(MangaActivity::class.java, this,
+            false, ShowTypeEnum.MANGA.toString())}
+    }
+
+    override fun onStop() {
+        ReadWriteJson.getInstance().write(this, false)
+        super.onStop()
     }
 }

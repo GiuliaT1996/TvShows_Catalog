@@ -30,10 +30,20 @@
         android:background="@drawable/icons8_simple_arrow_50" />
 
     <ImageView
+        android:id="@+id/status"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_toStartOf="@+id/arrow"
+        android:background="@drawable/icons8_checkmark_90"
+        android:backgroundTint="@color/grey"
+        android:visibility="gone"/>
+
+    <ImageView
         android:id="@+id/completed"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_toStartOf="@+id/arrow"
+        android:layout_toStartOf="@+id/status"
         android:layout_marginTop="20dp"
         android:background="@drawable/icons8_checkmark_100__1_"
         android:backgroundTint="@color/grey"/>
@@ -42,7 +52,7 @@
         android:id="@+id/not_completed"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_toStartOf="@+id/arrow"
+        android:layout_toStartOf="@+id/status"
         android:layout_marginTop="20dp"
         android:background="@drawable/icons8_checkmark_100" />
 

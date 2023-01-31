@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="344dp"
+        android:layout_height="390dp"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="false"
+        android:background="@drawable/round_background"
+        android:contentDescription="@string/sfondo" />
+
+    <Button
+        android:id="@+id/remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/background"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/round_button"
+        android:text="@string/rimuovi_serie" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/line"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_button"
+        android:text="@string/aggiorna_serie" />
+
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/remove"
+        android:layout_alignStart="@+id/background"
+        android:layout_alignEnd="@id/background"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#0D4360"
+        android:foregroundTint="#0D4360"
+        app:srcCompat="@android:drawable/bottom_bar"
+        app:tint="#0D4360" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_input_text"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:hint="@string/nome"
+        android:layout_alignTop="@id/background"
+        android:layout_above="@id/status_dropdown"
+        android:layout_marginBottom="20dp"
+        android:textColorHint="@color/light_blue"
+        app:boxStrokeColor="@color/light_blue"
+        app:endIconTint="@color/transparent">
+
+        <AutoCompleteTextView
+            android:id="@+id/name_auto_complete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:inputType="text"
+            android:textColor="@color/light_blue"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/status_dropdown"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/update"
+        android:layout_marginBottom="25dp"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/light_blue"
+        app:endIconTint="@color/transparent"
+        android:textColorHint="@color/light_blue"
+        android:clickable="true">
+
+        <AutoCompleteTextView
+            android:id="@+id/status_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            android:textColor="@color/light_blue"
+            android:ellipsize="end"
+            tools:text="Status"
+            android:backgroundTint="@color/transparent"
+            android:maxLines="1"
+            android:singleLine="true"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</RelativeLayout>

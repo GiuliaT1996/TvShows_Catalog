@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 
-class AddSeasonRecyclerAdapter (private val dataSet : MutableList<Season>) : RecyclerView.Adapter<AddSeasonRecyclerAdapter.MyViewHolder>() {
+class AddSeasonRecyclerAdapter (private val dataSet : MutableList<Season>)
+    : RecyclerView.Adapter<AddSeasonRecyclerAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var name: TextView

@@ -1,27 +1,21 @@
 package com.angiuprojects.gamecatalog.activities
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
+import com.angiuprojects.gamecatalog.entities.implementation.Anime
+import com.angiuprojects.gamecatalog.entities.implementation.Manga
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.queries.Queries
-import com.angiuprojects.gamecatalog.utilities.Constants
-import com.angiuprojects.gamecatalog.utilities.Utils
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
+import com.angiuprojects.gamecatalog.utilities.*
 
 class AddActivity : AppCompatActivity() {
 
@@ -31,25 +25,61 @@ class AddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
+
         seasons = mutableListOf()
+
+        var showType = ""
+        val extras = intent.extras
+        if (extras != null) showType = extras.getString("showType")!!
+
+        val statusSpinner = findViewById<AutoCompleteTextView>(R.id.status_spinner)
+        Utils.getInstance().assignAdapterToSpinner(statusSpinner, this)
+
+        if(showType == ShowTypeEnum.MANGA.toString()) //TODO CHECK
+            statusSpinner.visibility = View.VISIBLE
+
         dialog = Dialog(this)
-        findViewById<Button>(R.id.add_button).setOnClickListener{onClickAddTvShow()}
+        findViewById<Button>(R.id.add_button).setOnClickListener{onClickAdd(showType, statusSpinner)}
         val recyclerView = findViewById<RecyclerView>(R.id.seasons_list)
-        findViewById<ImageButton>(R.id.add_season).setOnClickListener{ Utils.getInstance().onClickOpenPopUpAddSeason(dialog, seasons, recyclerView, findViewById(android.R.id.content), null, null, null, null)}
+
+        findViewById<ImageButton>(R.id.add_season).setOnClickListener{ Utils.getInstance().onClickOpenPopUpAddSeason(dialog,
+            seasons, recyclerView, findViewById(android.R.id.content), ShowTypeEnum.valueOf(showType), null,
+            null, null, null)}
     }
 
-    private fun onClickAddTvShow() {
+    private fun onClickAdd(showType: String, statusSpinner: AutoCompleteTextView) {
 
-        val name = findViewById<AutoCompleteTextView>(R.id.name_auto_complete)
+        val name = findViewById<AutoCompleteTextView>(R.id.name_auto_complete).text.toString().trim()
 
-        if(Utils.getInstance().launchSnackBar(name.text.toString().trim() == "", "Inserire il nome!", findViewById(android.R.id.content)))
+        if(Utils.getInstance().launchSnackBar(name == "", "Inserire il nome!", findViewById(android.R.id.content)))
             return
 
         if(Utils.getInstance().launchSnackBar(seasons.isEmpty(), "Inserire almeno una stagione!", findViewById(android.R.id.content)))
             return
 
-        Queries.getInstance().addUpdate(Constants.getInstance().tvShowDbReference, TVShow(name.text.toString(), seasons))
+        when(showType) {
+            ShowTypeEnum.TV_SHOW.toString() -> Constants.user?.tvShowList?.add(TVShow(name, seasons))
+            ShowTypeEnum.ANIME.toString() -> Constants.user?.animeList?.add(Anime()) //TODO!!
+            ShowTypeEnum.MANGA.toString() -> Constants.user?.mangaList?.add(Manga(name, seasons, MangaStatusEnum.getMangaStatusEnum(statusSpinner.text.toString().trim())))
+        }
+        ReadWriteJson.getInstance().write(this, false)
+        changeActivity(showType)
+    }
 
-        Utils.getInstance().onClickChangeActivity(TVShowsActivity::class.java, this, true)
+    private fun <T> selectActivity(activity: Class<T>, showType: String) {
+        Utils.getInstance().onClickChangeActivity(activity, this, true, showType)
+    }
+
+    private fun changeActivity(showType: String) {
+        when(showType) {
+            ShowTypeEnum.TV_SHOW.toString() -> selectActivity(TVShowsActivity::class.java, showType)
+            //TODO MANCA ANIME
+            ShowTypeEnum.MANGA.toString() -> selectActivity(MangaActivity::class.java, showType)
+        }
+    }
+
+    override fun onStop() {
+        ReadWriteJson.getInstance().write(this, false)
+        super.onStop()
     }
 }
