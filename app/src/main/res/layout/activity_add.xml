@@ -103,6 +103,7 @@
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeColor="@color/light_blue"
+        android:hint="@string/status"
         app:endIconTint="@color/transparent"
         android:textColorHint="@color/light_blue"
         android:visibility="gone"

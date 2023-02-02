@@ -11,7 +11,6 @@ import android.view.animation.Animation
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.queries.Queries
 import com.angiuprojects.gamecatalog.utilities.Constants
 import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
 import com.angiuprojects.gamecatalog.utilities.Utils
@@ -32,7 +31,6 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun initializeSingletons() {
         Constants.initializeConstantSingleton()
-        Queries.initializeQueriesSingleton()
         Utils.initializeUtilsSingleton()
         ReadWriteJson.initializeSingleton()
     }

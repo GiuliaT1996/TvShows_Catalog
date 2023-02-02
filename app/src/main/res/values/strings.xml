@@ -20,4 +20,5 @@
     <string name="aggiorna_serie">Aggiorna</string>
     <string name="modifica_stagione">Modifica Stagione</string>
     <string name="rimuovi_stagione">Rimuovi Stagione</string>
+    <string name="status">Stato</string>
 </resources>

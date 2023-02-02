@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -19,6 +20,8 @@ import com.angiuprojects.gamecatalog.adapters.MainItemRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
 import com.angiuprojects.gamecatalog.entities.MainItem
 import com.angiuprojects.gamecatalog.entities.implementation.Season
+import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
+import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -38,12 +41,19 @@ class Utils {
         }
     }
 
+    fun getPixelsFromDP(context: Context, dps: Int) : Int {
+        val scale: Float = context.resources.displayMetrics.density
+        return (dps * scale + 0.5f).toInt()
+    }
+
     fun onClickExpandCollapse(recyclerView: RecyclerView, expandButton: ImageButton) {
         if(recyclerView.visibility == View.GONE) {
+            Log.i(Constants.logger, "EXPAND")
             //expand
             recyclerView.visibility = View.VISIBLE
             expandButton.rotation = 180F
         } else {
+            Log.i(Constants.logger, "COLLAPSE")
             recyclerView.visibility = View.GONE
             expandButton.rotation = -90F
         }
@@ -98,7 +108,8 @@ class Utils {
                                  parentRecyclerAdapter: MainItemRecyclerAdapter?,
                                  position: Int?,
                                  parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
-                                 showTypeEnum: ShowTypeEnum) {
+                                 showTypeEnum: ShowTypeEnum
+    ) {
 
         var seenEpisodes = 0
         var totalEpisodes = 0
@@ -132,7 +143,8 @@ class Utils {
                                          parentRecyclerAdapter: MainItemRecyclerAdapter?,
                                          position: Int?,
                                          parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
-                                         showTypeEnum: ShowTypeEnum) {
+                                         showTypeEnum: ShowTypeEnum
+    ) {
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
@@ -163,7 +175,8 @@ class Utils {
     }
 
     fun setMainItemRecyclerAdapter(itemList: MutableList<out MainItem>,
-    context: Context, recyclerView: RecyclerView, showTypeEnum: ShowTypeEnum) {
+    context: Context, recyclerView: RecyclerView, showTypeEnum: ShowTypeEnum
+    ) {
 
         val adapter = MainItemRecyclerAdapter(itemList, context, showTypeEnum)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)

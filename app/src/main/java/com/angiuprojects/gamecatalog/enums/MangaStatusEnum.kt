@@ -1,6 +1,6 @@
-package com.angiuprojects.gamecatalog.utilities
+package com.angiuprojects.gamecatalog.enums
 
-enum class MangaStatusEnum(status: String) {
+enum class MangaStatusEnum(val status: String) {
     COMPLETO("Completo"),
     INTERROTTO("Interrotto"),
     IN_CORSO("In Corso");
