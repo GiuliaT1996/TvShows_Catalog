@@ -1,7 +1,7 @@
 package com.angiuprojects.gamecatalog.entities.implementation
 
 import com.angiuprojects.gamecatalog.entities.MainItem
-import com.angiuprojects.gamecatalog.utilities.MangaStatusEnum
+import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
 
 class Manga : MainItem {
 

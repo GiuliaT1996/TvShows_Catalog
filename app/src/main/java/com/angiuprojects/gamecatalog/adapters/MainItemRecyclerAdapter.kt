@@ -17,11 +17,14 @@ import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.entities.MainItem
 import com.angiuprojects.gamecatalog.entities.implementation.Manga
 import com.angiuprojects.gamecatalog.entities.implementation.Season
+import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
+import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.angiuprojects.gamecatalog.utilities.*
 
 open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainItem>,
                                    private val context: Context,
-                                   private val showTypeEnum: ShowTypeEnum)
+                                   private val showTypeEnum: ShowTypeEnum
+)
     : RecyclerView.Adapter<MainItemRecyclerAdapter.MainItemViewHolder>() {
 
     class MainItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -110,9 +113,8 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
 
     private fun handlePopUpStatus(popUpView: View, manga: Manga?) : AutoCompleteTextView {
         val filterSpinner = popUpView.findViewById<AutoCompleteTextView>(R.id.status_spinner)
-        Utils.getInstance().assignAdapterToSpinner(filterSpinner, context)
-
         filterSpinner.setText(manga?.status.toString())
+        Utils.getInstance().assignAdapterToSpinner(filterSpinner, context)
         return filterSpinner
     }
 
@@ -162,9 +164,11 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         return "$completedSeasons/${seasonList.size}"
     }
 
-    fun deleteLastSeason(position: Int) {
+    fun deleteLastSeason(position: Int, holder: MainItemViewHolder) {
         dataSet[position].seasons.removeAt(dataSet[position].seasons.size - 1)
-        this.notifyItemChanged(position)
+        notifyItemChanged(position)
+        //TODO: trovare il modo di espanderlo dopo notifyItemChanged
+        //Utils.getInstance().onClickExpandCollapse(holder.seasons, holder.expand)
         ReadWriteJson.getInstance().write(context, false)
     }
 

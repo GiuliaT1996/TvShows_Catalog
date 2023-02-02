@@ -1,12 +1,11 @@
 package com.angiuprojects.gamecatalog.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
-import com.angiuprojects.gamecatalog.utilities.ShowTypeEnum
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class MenuActivity : AppCompatActivity() {
@@ -19,17 +18,23 @@ class MenuActivity : AppCompatActivity() {
     private fun setOnClickMethods() {
         val tvShowsButton : ImageButton = findViewById(R.id.tv_show)
         tvShowsButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(TVShowsActivity::class.java, this,
-            false, ShowTypeEnum.TV_SHOW.toString())}
+            false, ShowTypeEnum.TV_SHOW.type)}
 
         val animeButton : ImageButton = findViewById(R.id.anime)
 
         val mangaButton : ImageButton = findViewById(R.id.manga)
         mangaButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(MangaActivity::class.java, this,
-            false, ShowTypeEnum.MANGA.toString())}
+            false, ShowTypeEnum.MANGA.type)}
     }
 
     override fun onStop() {
         ReadWriteJson.getInstance().write(this, false)
         super.onStop()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        ReadWriteJson.getInstance().write(this, false)
+        finish()
     }
 }

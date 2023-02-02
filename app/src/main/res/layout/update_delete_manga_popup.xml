@@ -88,6 +88,7 @@
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
+        android:hint="@string/status"
         app:boxCornerRadiusTopStart="15dp"
         app:boxStrokeColor="@color/light_blue"
         app:endIconTint="@color/transparent"

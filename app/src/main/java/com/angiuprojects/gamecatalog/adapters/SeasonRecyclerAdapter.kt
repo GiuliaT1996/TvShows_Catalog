@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.entities.MainItem
 import com.angiuprojects.gamecatalog.entities.implementation.Season
+import com.angiuprojects.gamecatalog.enums.PopUpActionsEnum
+import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.angiuprojects.gamecatalog.utilities.*
 
 open class SeasonRecyclerAdapter(private val parent: MainItem,
@@ -75,7 +77,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         ReadWriteJson.getInstance().write(context, false)
     }
 
-    private fun onClickOpenPopUp(popUpText: String, action: PopUpActionsEnum, position: Int) {
+    private fun onClickOpenPopUp(popUpText: String, action: PopUpActionsEnum, parentPosition: Int) {
 
         val inflater = context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popUpView: View = inflater.inflate(R.layout.yes_no_message_popup, null)
@@ -87,8 +89,8 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         yesButton.setOnClickListener{
 
             when(action) {
-                PopUpActionsEnum.DELETE_SHOW -> parentRecyclerAdapter.deleteItem(position, parent)
-                PopUpActionsEnum.DELETE_SEASON -> parentRecyclerAdapter.deleteLastSeason(position)
+                PopUpActionsEnum.DELETE_SHOW -> parentRecyclerAdapter.deleteItem(parentPosition, parent)
+                PopUpActionsEnum.DELETE_SEASON -> parentRecyclerAdapter.deleteLastSeason(parentPosition, parentViewHolder)
             }
             dialog.dismiss()
         }
@@ -146,6 +148,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
 
         if(dataSet[holder.adapterPosition].seenEpisodes == dataSet[holder.adapterPosition].totalEpisodes)
             updateParent()
+
         ReadWriteJson.getInstance().write(context, false)
     }
 
@@ -170,22 +173,21 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
     private fun onLongClickOpenPopUpToEdit(position: Int) {
         val popUpView = Utils.getInstance().openAddEditSeasonPopUp(dialog, dataSet[position].name)
 
-        adjustBackgroundToEdit(popUpView, position)
+        if(position != 0 && position >= dataSet.size - 1) adjustBackgroundToEdit(popUpView)
 
         val nameView = popUpView.findViewById<TextView>(R.id.number_input_text)
         val seenView = popUpView.findViewById<AutoCompleteTextView>(R.id.seen_auto_complete)
         seenView.setText(dataSet[position].seenEpisodes.toString())
         val totalView = popUpView.findViewById<AutoCompleteTextView>(R.id.total_auto_complete)
         totalView.setText(dataSet[position].totalEpisodes.toString())
+
         val editSeason = popUpView.findViewById<Button>(R.id.add_season)
         editSeason.text = context.getString(R.string.modifica_stagione)
         try {
             editSeason.setOnClickListener {
                 onClickEditSeason(
-                    nameView.text.toString().trim(),
-                    seenView.text.toString().toInt(),
-                    totalView.text.toString().toInt(),
-                    position
+                    nameView.text.toString().trim(), seenView.text.toString().toInt(),
+                    totalView.text.toString().toInt(), position
                 )
             }
         } catch (e: Exception) {
@@ -193,18 +195,14 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         }
     }
 
-    private fun adjustBackgroundToEdit(popUpView: View, position: Int) {
+    private fun adjustBackgroundToEdit(popUpView: View) {
         popUpView.findViewById<ImageView>(R.id.line).visibility = View.VISIBLE
         val removeButton = popUpView.findViewById<Button>(R.id.remove)
         removeButton.visibility = View.VISIBLE
-        removeButton.setOnClickListener { onClickRemoveSeason(position) }
-        popUpView.findViewById<ImageView>(R.id.background).layoutParams.height = 490
-    }
-
-    private fun onClickRemoveSeason(position: Int) {
-        dataSet.removeAt(position)
-        notifyItemRemoved(position)
-        updateParent()
+        removeButton.setOnClickListener { onClickOpenPopUp("Rimuovere stagione?",
+                                            PopUpActionsEnum.DELETE_SEASON, this.position) }
+        popUpView.findViewById<ImageView>(R.id.background).layoutParams.height =
+            Utils.getInstance().getPixelsFromDP(context, 490)
     }
 
     private fun setProgressBar(holder: SeasonViewHolder, season: Season) {
