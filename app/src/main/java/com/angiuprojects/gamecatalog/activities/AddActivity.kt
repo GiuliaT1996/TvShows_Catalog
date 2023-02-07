@@ -56,11 +56,17 @@ class AddActivity : AppCompatActivity() {
 
         val name = findViewById<AutoCompleteTextView>(R.id.name_auto_complete).text.toString().trim()
 
-        if(Utils.getInstance().launchSnackBar(name == "", "Inserire il nome!", findViewById(android.R.id.content)))
+        if(Utils.getInstance().launchSnackBar(name == "", "Inserire il nome!",
+                findViewById(android.R.id.content)))
             return
 
-        if(Utils.getInstance().launchSnackBar(seasons.isEmpty(), "Inserire almeno una stagione!", findViewById(android.R.id.content)))
+        if(Utils.getInstance().launchSnackBar(seasons.isEmpty(), "Inserire almeno una stagione!",
+                findViewById(android.R.id.content)))
             return
+
+        if(!Utils.getInstance().launchSnackBar(Utils.getInstance()
+                .checkIfNameAlreadyExists(name, null, ShowTypeEnum.getShowTypeEnum(showType)),
+                "Nome già esistente!", findViewById(android.R.id.content)))
 
         when(showType) {
             ShowTypeEnum.TV_SHOW.type -> Constants.user?.tvShowList?.add(TVShow(name, seasons))

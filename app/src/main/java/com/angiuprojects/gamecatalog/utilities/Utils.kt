@@ -19,7 +19,10 @@ import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.MainItemRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
 import com.angiuprojects.gamecatalog.entities.MainItem
+import com.angiuprojects.gamecatalog.entities.implementation.Anime
+import com.angiuprojects.gamecatalog.entities.implementation.Manga
 import com.angiuprojects.gamecatalog.entities.implementation.Season
+import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
 import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +42,19 @@ class Utils {
         fun getInstance(): Utils {
             return singleton
         }
+    }
+
+    fun checkIfNameAlreadyExists(newName: String, position: Int?, showTypeEnum: ShowTypeEnum) : Boolean{
+        return when(showTypeEnum) {
+            ShowTypeEnum.MANGA -> genericCheckName(Constants.user?.mangaList, newName, position)
+            ShowTypeEnum.TV_SHOW -> genericCheckName(Constants.user?.tvShowList, newName, position)
+            ShowTypeEnum.ANIME -> true //TODO
+        }
+    }
+
+    private fun genericCheckName(items: MutableList<out MainItem>? , newName: String, position: Int?) : Boolean {
+        return items?.filterIndexed{ index, it ->  it.name == newName && (position == null || index != position) }
+            .isNullOrEmpty()
     }
 
     fun getPixelsFromDP(context: Context, dps: Int) : Int {
