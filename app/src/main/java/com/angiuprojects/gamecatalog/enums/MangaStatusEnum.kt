@@ -8,12 +8,12 @@ enum class MangaStatusEnum(val status: String) {
     companion object {
         fun getList() : List<String> {
             return values().map {
-                it.toString()
+                it.status
             }
         }
 
         fun getMangaStatusEnum (status: String) : MangaStatusEnum {
-            return values().filter { it.toString() == status }[0]
+            return values().filter { it.status == status }[0]
         }
     }
 }

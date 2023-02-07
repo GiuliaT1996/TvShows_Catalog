@@ -19,7 +19,9 @@ import com.angiuprojects.gamecatalog.entities.implementation.Manga
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
 import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
-import com.angiuprojects.gamecatalog.utilities.*
+import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
+import com.angiuprojects.gamecatalog.utilities.Utils
 
 open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainItem>,
                                    private val context: Context,
@@ -70,21 +72,21 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         setRecyclerAdapter(holder.seasons, holder)
 
         holder.layout.setOnLongClickListener {
-            onClickOpenPopUp(position, dataSet[position], holder)
+            onLongClickOpenEditPopUp(position, dataSet[position], holder)
             true
         }
     }
 
     private fun setMangaStatus(holder: MainItemViewHolder, status: MangaStatusEnum) {
         when(status) {
-            MangaStatusEnum.COMPLETO -> holder.status.setBackgroundColor(Color.GREEN)
-            MangaStatusEnum.INTERROTTO -> holder.status.setBackgroundColor(Color.RED)
-            MangaStatusEnum.IN_CORSO -> holder.status.setBackgroundColor(Color.GRAY)
+            MangaStatusEnum.COMPLETO -> holder.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.green)
+            MangaStatusEnum.INTERROTTO -> holder.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.red)
+            MangaStatusEnum.IN_CORSO -> holder.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.grey)
         }
         holder.status.visibility = View.VISIBLE
     }
 
-    private fun onClickOpenPopUp(position: Int, item: MainItem, holder: MainItemViewHolder) {
+    private fun onLongClickOpenEditPopUp(position: Int, item: MainItem, holder: MainItemViewHolder) {
 
         val inflater = context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var popUpView: View = inflater.inflate(R.layout.update_delete_show_popup, null)
@@ -102,7 +104,8 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         newName.setText(item.name)
 
         val updateButton = popUpView.findViewById<Button>(R.id.update)
-        updateButton.setOnClickListener{updateShowsName(position, newName.text.toString().trim(), item, status)}
+        updateButton.setOnClickListener{ updateShowsName(position,
+            newName.text.toString().trim(), item, status, popUpView) }
 
         val removeButton = popUpView.findViewById<Button>(R.id.remove)
         removeButton.setOnClickListener{deleteItem(position, item)}
@@ -113,7 +116,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
 
     private fun handlePopUpStatus(popUpView: View, manga: Manga?) : AutoCompleteTextView {
         val filterSpinner = popUpView.findViewById<AutoCompleteTextView>(R.id.status_spinner)
-        filterSpinner.setText(manga?.status.toString())
+        filterSpinner.setText(manga?.status?.status ?: "")
         Utils.getInstance().assignAdapterToSpinner(filterSpinner, context)
         return filterSpinner
     }
@@ -125,13 +128,17 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         dialog.dismiss()
     }
 
-    private fun updateShowsName(position: Int, newName: String, item: MainItem, status: AutoCompleteTextView?) {
+    private fun updateShowsName(position: Int, newName: String, item: MainItem,
+                                status: AutoCompleteTextView?, popUpView: View) {
 
         if(status != null && item is Manga)
             item.status = MangaStatusEnum.getMangaStatusEnum(status.text.toString().trim())
 
         if(newName.isNotEmpty() && newName != item.name.trim()) {
-            item.name = newName
+            if(!Utils.getInstance().launchSnackBar(Utils.getInstance()
+                    .checkIfNameAlreadyExists(newName, position, showTypeEnum),
+                    "Nome già esistente!", popUpView))
+                item.name = newName
         }
         this.notifyItemChanged(position)
         ReadWriteJson.getInstance().write(context, false)
@@ -142,7 +149,8 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         holder.seasonsCompleted.text = populateCompletedSeasons(seasonList, holder)
     }
 
-    private fun populateCompletedSeasons(seasonList: MutableList<Season>, holder: MainItemViewHolder) : String {
+    private fun populateCompletedSeasons(seasonList: MutableList<Season>, holder: MainItemViewHolder)
+    : String {
         var completedSeasons = 0
 
         try {
