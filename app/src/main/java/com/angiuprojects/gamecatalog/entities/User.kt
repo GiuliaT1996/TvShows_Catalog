@@ -9,6 +9,4 @@ class User(
     var animeList: MutableList<Anime>,
     var mangaList: MutableList<Manga>,
     var tvShowList: MutableList<TVShow>
-) {
-
-}
+)

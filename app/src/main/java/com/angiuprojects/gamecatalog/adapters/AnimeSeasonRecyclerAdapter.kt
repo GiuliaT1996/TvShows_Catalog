@@ -8,59 +8,47 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.entities.MainItem
+import com.angiuprojects.gamecatalog.entities.implementation.Anime
 import com.angiuprojects.gamecatalog.entities.implementation.Season
 import com.angiuprojects.gamecatalog.enums.PopUpActionsEnum
 import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
-import com.angiuprojects.gamecatalog.utilities.*
+import com.angiuprojects.gamecatalog.utilities.Constants
+import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
+import com.angiuprojects.gamecatalog.utilities.SeasonAdapterUtils
+import com.angiuprojects.gamecatalog.utilities.Utils
 
-open class SeasonRecyclerAdapter(private val parent: MainItem,
-                                 private val parentRecyclerAdapter: MainItemRecyclerAdapter,
+class AnimeSeasonRecyclerAdapter (private val parent: Anime,
+                                 private val parentRecyclerAdapter: AnimeRecyclerAdapter,
                                  private val position: Int,
                                  private val parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder,
-                                 private val context: Context,
-                                 private val showTypeEnum: ShowTypeEnum
+                                 private val context: Context
 ): RecyclerView.Adapter<SeasonRecyclerAdapter.SeasonViewHolder>()  {
 
-    private lateinit var dataSet: MutableList<Season>
-
-    class SeasonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var name: TextView
-        var episodesCompleted: TextView
-        var plusButton: ImageButton
-        var minusButton: ImageButton
-        var progressBar: ProgressBar
-        var layout: RelativeLayout
-
-        init {
-            name = view.findViewById(R.id.name)
-            episodesCompleted = view.findViewById(R.id.episodes_completed)
-            plusButton = view.findViewById(R.id.plus_button)
-            minusButton = view.findViewById(R.id.minus_button)
-            progressBar = view.findViewById(R.id.progress_bar)
-            layout = view.findViewById(R.id.season_view)
-        }
-    }
-
+    private var dataSet: MutableList<Season> = parent.sagas[0].seasons
     private lateinit var dialog: Dialog
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): SeasonRecyclerAdapter.SeasonViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.season_view, parent, false)
 
         dialog = Dialog(context)
 
-        return SeasonViewHolder(view)
+        return SeasonRecyclerAdapter.SeasonViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SeasonViewHolder, position: Int) {
-        dataSet = parent.seasons
+    override fun onBindViewHolder(holder: SeasonRecyclerAdapter.SeasonViewHolder, position: Int) {
 
-        val season = parent.seasons[holder.adapterPosition]
+        val season = dataSet[holder.adapterPosition]
 
         holder.name.text = season.name
         SeasonAdapterUtils.getInstance().setProgressBar(holder, dataSet[holder.adapterPosition])
@@ -73,7 +61,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
     }
 
     private fun updateParent(){
-        parentRecyclerAdapter.updateCompletedSeasons(parentViewHolder, dataSet)
+        parentRecyclerAdapter.updateCompletedSeasons(parentViewHolder, parent)
         ReadWriteJson.getInstance().write(context, false)
     }
 
@@ -102,7 +90,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         dialog.show()
     }
 
-    private fun minus(holder: SeasonViewHolder) {
+    private fun minus(holder: SeasonRecyclerAdapter.SeasonViewHolder) {
         if(dataSet[holder.adapterPosition].seenEpisodes == 0) {
             Log.i(Constants.logger, "Non è più possibile rimuovere episodi visti")
             if(dataSet.size > 1) {
@@ -126,20 +114,20 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         ReadWriteJson.getInstance().write(context, false)
     }
 
-    private fun plus(holder: SeasonViewHolder) {
+    private fun plus(holder: SeasonRecyclerAdapter.SeasonViewHolder) {
         if(dataSet[holder.adapterPosition].seenEpisodes == dataSet[holder.adapterPosition].totalEpisodes) {
             if(holder.adapterPosition == dataSet.size - 1) {
                 Utils.getInstance().onClickOpenPopUpAddSeason(
-                        dialog,
-                        dataSet,
-                        parentViewHolder.seasons,
-                        holder.itemView.rootView.findViewById(android.R.id.content),
-                        showTypeEnum,
-                        parent,
-                        parentRecyclerAdapter,
-                        position,
-                        parentViewHolder,
-                        null)
+                    dialog,
+                    dataSet,
+                    parentViewHolder.seasons,
+                    holder.itemView.rootView.findViewById(android.R.id.content),
+                    ShowTypeEnum.ANIME,
+                    parent.sagas[0],
+                    null,
+                    position,
+                    parentViewHolder,
+                    parentRecyclerAdapter)
                 updateParent()
             }
             return
@@ -163,7 +151,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
             updateParent()
         }
 
-        parent.seasons = dataSet
+        parent.sagas[0].seasons = dataSet
 
         notifyItemChanged(position)
         dialog.dismiss()
@@ -201,10 +189,10 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
         val removeButton = popUpView.findViewById<Button>(R.id.remove)
         removeButton.visibility = View.VISIBLE
         removeButton.setOnClickListener { onClickOpenPopUp("Rimuovere stagione?",
-                                            PopUpActionsEnum.DELETE_SEASON, this.position) }
+            PopUpActionsEnum.DELETE_SEASON, this.position) }
         popUpView.findViewById<ImageView>(R.id.background).layoutParams.height =
             Utils.getInstance().getPixelsFromDP(context, 490)
     }
 
-    override fun getItemCount() = parent.seasons.size
+    override fun getItemCount() = dataSet.size
 }

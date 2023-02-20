@@ -11,11 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
+import com.angiuprojects.gamecatalog.adapters.AnimeRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.MainItemRecyclerAdapter
 import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
 import com.angiuprojects.gamecatalog.entities.MainItem
@@ -48,11 +50,16 @@ class Utils {
         return when(showTypeEnum) {
             ShowTypeEnum.MANGA -> genericCheckName(Constants.user?.mangaList, newName, position)
             ShowTypeEnum.TV_SHOW -> genericCheckName(Constants.user?.tvShowList, newName, position)
-            ShowTypeEnum.ANIME -> true //TODO
+            ShowTypeEnum.ANIME -> checkAnimeName(Constants.user?.animeList, newName, position)
         }
     }
 
-    private fun genericCheckName(items: MutableList<out MainItem>? , newName: String, position: Int?) : Boolean {
+    fun genericCheckName(items: MutableList<out MainItem>? , newName: String, position: Int?) : Boolean {
+        return items?.filterIndexed{ index, it ->  it.name == newName && (position == null || index != position) }
+            .isNullOrEmpty()
+    }
+
+    private fun checkAnimeName(items: MutableList<Anime>?, newName: String, position: Int?) : Boolean{
         return items?.filterIndexed{ index, it ->  it.name == newName && (position == null || index != position) }
             .isNullOrEmpty()
     }
@@ -90,7 +97,8 @@ class Utils {
                                   parentMainItem: MainItem?,
                                   parentRecyclerAdapter: MainItemRecyclerAdapter?,
                                   position: Int?,
-                                  parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?) {
+                                  parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
+                                  animeRecyclerAdapter: AnimeRecyclerAdapter?) {
 
         val popUpView = openAddEditSeasonPopUp(dialog, buildString {
             append("Stagione ")
