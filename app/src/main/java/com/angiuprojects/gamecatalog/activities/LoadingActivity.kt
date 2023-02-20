@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.utilities.Constants
 import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
+import com.angiuprojects.gamecatalog.utilities.SeasonAdapterUtils
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class LoadingActivity : AppCompatActivity() {
@@ -32,6 +33,7 @@ class LoadingActivity : AppCompatActivity() {
     private fun initializeSingletons() {
         Constants.initializeConstantSingleton()
         Utils.initializeUtilsSingleton()
+        SeasonAdapterUtils.initializeUtilsSingleton()
         ReadWriteJson.initializeSingleton()
     }
 

@@ -30,18 +30,18 @@ class ReadWriteJson {
     fun getUser(context: Context, resetUserDTO: Boolean) : User {
         val dir = getDirectory(context)
         val json = read(dir, context)
-        Log.i(Constants.logger, "Json : " + json)
+        Log.i(Constants.logger, "Json: $json")
         if(json != "" && !resetUserDTO) {
             try {
                 return Gson().fromJson(json, User::class.java)
             } catch (e: Exception) {
-                Log.e(Constants.logger, "Errore nella conversione del file in json")
+                Log.e(Constants.logger, "Error converting file in json")
             }
         }
         return createNewUser()
     }
 
-    fun createNewUser() : User {
+    private fun createNewUser() : User {
         val id = "" + floor(Math.random() * 9) + floor(Math.random() * 9) + floor(Math.random() * 9) + floor(Math.random() * 9) + floor(Math.random() * 9) + floor(Math.random() * 9)
         return User(id, mutableListOf(), mutableListOf(), mutableListOf())
     }
@@ -50,14 +50,14 @@ class ReadWriteJson {
         try {
             val file = File(dir, fileName)
             if (!file.exists()) {
-                Log.e(Constants.logger, "Il file non esiste")
+                Log.e(Constants.logger, "File does not exist")
                 write(context, true)
                 return ""
             }
             val reader = FileReader(file)
             return reader.readText()
         } catch (e: Exception) {
-            Log.e(Constants.logger, "Errore nella conversione del file in json")
+            Log.e(Constants.logger, "Error converting file in json")
         }
         return ""
     }
@@ -73,7 +73,7 @@ class ReadWriteJson {
             writer.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e(Constants.logger, "Errore nella scrittura o nel salvataggio del file")
+            Log.e(Constants.logger, "Error reading or saving file")
         }
     }
 

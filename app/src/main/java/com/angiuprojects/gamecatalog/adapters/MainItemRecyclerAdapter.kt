@@ -108,7 +108,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
             newName.text.toString().trim(), item, status, popUpView) }
 
         val removeButton = popUpView.findViewById<Button>(R.id.remove)
-        removeButton.setOnClickListener{deleteItem(position, item)}
+        removeButton.setOnClickListener{deleteItem(position)}
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
@@ -121,7 +121,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         return filterSpinner
     }
 
-    open fun deleteItem(position: Int, item: MainItem) {
+    open fun deleteItem(position: Int) {
         this.notifyItemRemoved(position)
         dataSet.removeAt(position)
         ReadWriteJson.getInstance().write(context, false)
@@ -135,7 +135,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
             item.status = MangaStatusEnum.getMangaStatusEnum(status.text.toString().trim())
 
         if(newName.isNotEmpty() && newName != item.name.trim()) {
-            if(!Utils.getInstance().launchSnackBar(Utils.getInstance()
+            if(!Utils.getInstance().launchSnackBar(!Utils.getInstance()
                     .checkIfNameAlreadyExists(newName, position, showTypeEnum),
                     "Nome già esistente!", popUpView))
                 item.name = newName
@@ -155,7 +155,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
 
         try {
             seasonList.forEach{
-                if(it.isCompleted(it.seenEpisodes, it.totalEpisodes)) completedSeasons++
+                if(it.isCompleted(it)) completedSeasons++
             }
         } catch (e: Exception) {
             Log.e(Constants.logger, "La lista delle stagioni è vuota o nulla. ${e.message}")

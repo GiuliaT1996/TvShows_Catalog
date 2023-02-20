@@ -21,6 +21,8 @@ class MenuActivity : AppCompatActivity() {
             false, ShowTypeEnum.TV_SHOW.type)}
 
         val animeButton : ImageButton = findViewById(R.id.anime)
+        animeButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(AnimeActivity::class.java, this,
+            false, ShowTypeEnum.ANIME.type)}
 
         val mangaButton : ImageButton = findViewById(R.id.manga)
         mangaButton.setOnClickListener{ Utils.getInstance().onClickChangeActivity(MangaActivity::class.java, this,

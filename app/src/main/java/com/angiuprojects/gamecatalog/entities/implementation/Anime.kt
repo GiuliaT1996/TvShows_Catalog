@@ -2,22 +2,18 @@ package com.angiuprojects.gamecatalog.entities.implementation
 
 class Anime {
 
+    var name: String = ""
     var hasSaga : Boolean = false
     var sagas: MutableList<Saga> = mutableListOf()
     var completed : Boolean = false
 
     constructor()
 
-    constructor(sagas: MutableList<Saga>) {
-        hasSaga = true
+    constructor(name: String, sagas: MutableList<Saga>, hasSaga: Boolean) {
+        this.name = name
+        this.hasSaga = hasSaga
         this.sagas = sagas
         completed = isCompleted(sagas)
-    }
-
-    constructor(saga: Saga) {
-        hasSaga = false
-        sagas.add(saga)
-        completed = saga.completed
     }
 
     private fun isCompleted(items: List<Saga>): Boolean {

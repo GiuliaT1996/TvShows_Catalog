@@ -16,6 +16,6 @@ class Saga  : MainItem {
     }
 
     override fun isCompleted (items: MutableList<Season>) : Boolean {
-        return !items.any { x -> !x.completed }
+        return !items.any { x -> !x.isCompleted(x) }
     }
 }

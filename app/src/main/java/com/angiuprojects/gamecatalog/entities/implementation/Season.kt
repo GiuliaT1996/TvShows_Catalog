@@ -15,10 +15,10 @@ class Season {
         this.name = "Stagione $number"
         this.seenEpisodes = seenEpisodes
         this.totalEpisodes = totalEpisodes
-        this.completed = isCompleted(seenEpisodes, totalEpisodes)
+        this.completed = seenEpisodes == totalEpisodes
     }
 
-    fun isCompleted(seen: Int, total: Int): Boolean {
-        return seen == total
+    fun isCompleted(season: Season): Boolean {
+        return season.seenEpisodes == season.totalEpisodes
     }
 }
