@@ -1,15 +1,8 @@
 package com.angiuprojects.gamecatalog.adapters
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,42 +16,11 @@ import com.angiuprojects.gamecatalog.utilities.Constants
 import com.angiuprojects.gamecatalog.utilities.ReadWriteJson
 import com.angiuprojects.gamecatalog.utilities.Utils
 
-open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainItem>,
-                                   private val context: Context,
-                                   private val showTypeEnum: ShowTypeEnum
+class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainItem>,
+                              private val context: Context,
+                              private val showTypeEnum: ShowTypeEnum
 )
-    : RecyclerView.Adapter<MainItemRecyclerAdapter.MainItemViewHolder>() {
-
-    class MainItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var name: TextView
-        var expand: ImageButton
-        var seasonsCompleted: TextView
-        var seasons: RecyclerView
-        var completedImage: ImageView
-        var status: ImageView
-        var layout: RelativeLayout
-
-        init {
-            name = view.findViewById(R.id.name)
-            expand = view.findViewById(R.id.arrow)
-            seasonsCompleted = view.findViewById(R.id.seasons_completed)
-            seasons = view.findViewById(R.id.seasons_recycler_view)
-            completedImage = view.findViewById(R.id.completed)
-            status = view.findViewById(R.id.status)
-            layout = view.findViewById(R.id.tv_show_view)
-        }
-    }
-
-    private lateinit var dialog : Dialog
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainItemViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.main_item_view, parent, false)
-
-        dialog = Dialog(context)
-
-        return MainItemViewHolder(view)
-    }
+    : FatherRecyclerAdapter<MainItem>(dataSet, context)  {
 
     override fun onBindViewHolder(holder: MainItemViewHolder, position: Int) {
         holder.name.text = dataSet[holder.adapterPosition].name
@@ -72,7 +34,8 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         setRecyclerAdapter(holder.seasons, holder)
 
         holder.layout.setOnLongClickListener {
-            onLongClickOpenEditPopUp(position, dataSet[position], holder)
+            onLongClickOpenEditPopUp(position, dataSet[position], dataSet[position].name, holder, isStatusEnabled(),
+                showTypeEnum, MainItem::name.getter, MainItem::name.setter)
             true
         }
     }
@@ -84,65 +47,6 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
             MangaStatusEnum.IN_CORSO -> holder.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.grey)
         }
         holder.status.visibility = View.VISIBLE
-    }
-
-    private fun onLongClickOpenEditPopUp(position: Int, item: MainItem, holder: MainItemViewHolder) {
-
-        val inflater = context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        var popUpView: View = inflater.inflate(R.layout.update_delete_show_popup, null)
-
-        var status: AutoCompleteTextView? = null
-
-        if(isStatusEnabled() && dataSet[holder.adapterPosition] is Manga) {
-            popUpView = inflater.inflate(R.layout.update_delete_manga_popup, null)
-            status = handlePopUpStatus(popUpView, dataSet[holder.adapterPosition] as Manga)
-        }
-
-        dialog.setContentView(popUpView)
-
-        val newName = popUpView.findViewById<AutoCompleteTextView>(R.id.name_auto_complete)
-        newName.setText(item.name)
-
-        val updateButton = popUpView.findViewById<Button>(R.id.update)
-        updateButton.setOnClickListener{ updateShowsName(position,
-            newName.text.toString().trim(), item, status, popUpView) }
-
-        val removeButton = popUpView.findViewById<Button>(R.id.remove)
-        removeButton.setOnClickListener{deleteItem(position)}
-
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-    }
-
-    private fun handlePopUpStatus(popUpView: View, manga: Manga?) : AutoCompleteTextView {
-        val filterSpinner = popUpView.findViewById<AutoCompleteTextView>(R.id.status_spinner)
-        filterSpinner.setText(manga?.status?.status ?: "")
-        Utils.getInstance().assignAdapterToSpinner(filterSpinner, context)
-        return filterSpinner
-    }
-
-    open fun deleteItem(position: Int) {
-        this.notifyItemRemoved(position)
-        dataSet.removeAt(position)
-        ReadWriteJson.getInstance().write(context, false)
-        dialog.dismiss()
-    }
-
-    private fun updateShowsName(position: Int, newName: String, item: MainItem,
-                                status: AutoCompleteTextView?, popUpView: View) {
-
-        if(status != null && item is Manga)
-            item.status = MangaStatusEnum.getMangaStatusEnum(status.text.toString().trim())
-
-        if(newName.isNotEmpty() && newName != item.name.trim()) {
-            if(!Utils.getInstance().launchSnackBar(!Utils.getInstance()
-                    .checkIfNameAlreadyExists(newName, position, showTypeEnum),
-                    "Nome già esistente!", popUpView))
-                item.name = newName
-        }
-        this.notifyItemChanged(position)
-        ReadWriteJson.getInstance().write(context, false)
-        dialog.dismiss()
     }
 
     fun updateCompletedSeasons(holder: MainItemViewHolder, seasonList: MutableList<Season>) {
@@ -172,7 +76,7 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
         return "$completedSeasons/${seasonList.size}"
     }
 
-    fun deleteLastSeason(position: Int, holder: MainItemViewHolder) {
+    fun deleteLastSeason(position: Int) {
         dataSet[position].seasons.removeAt(dataSet[position].seasons.size - 1)
         notifyItemChanged(position)
         //TODO: trovare il modo di espanderlo dopo notifyItemChanged
@@ -193,6 +97,4 @@ open class MainItemRecyclerAdapter(private val dataSet : MutableList<out MainIte
     private fun isStatusEnabled() : Boolean {
         return ShowTypeEnum.MANGA == showTypeEnum
     }
-
-    override fun getItemCount() = dataSet.size
 }

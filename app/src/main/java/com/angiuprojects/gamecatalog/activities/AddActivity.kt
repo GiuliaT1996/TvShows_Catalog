@@ -89,6 +89,7 @@ class AddActivity : AppCompatActivity() {
                 null,
                 null,
                 null,
+                null,
                 null
             )
         }
@@ -135,6 +136,7 @@ class AddActivity : AppCompatActivity() {
                 recyclerView,
                 findViewById(android.R.id.content),
                 ShowTypeEnum.getShowTypeEnum(showType),
+                null,
                 null,
                 null,
                 null,

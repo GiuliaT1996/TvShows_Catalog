@@ -23,4 +23,5 @@
     <string name="status">Stato</string>
     <string name="has_saga">L\'Anime ha delle saghe?</string>
     <string name="sagas">Saghe: </string>
+    <string name="dati_errati">I dati sono errati!</string>
 </resources>

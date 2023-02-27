@@ -14,6 +14,7 @@ import com.angiuprojects.gamecatalog.utilities.Constants
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class AnimeActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime)

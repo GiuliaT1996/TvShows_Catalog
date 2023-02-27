@@ -11,20 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.angiuprojects.gamecatalog.R
-import com.angiuprojects.gamecatalog.adapters.AddSeasonRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.AnimeRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.MainItemRecyclerAdapter
-import com.angiuprojects.gamecatalog.adapters.SeasonRecyclerAdapter
+import com.angiuprojects.gamecatalog.adapters.*
 import com.angiuprojects.gamecatalog.entities.MainItem
 import com.angiuprojects.gamecatalog.entities.implementation.Anime
-import com.angiuprojects.gamecatalog.entities.implementation.Manga
 import com.angiuprojects.gamecatalog.entities.implementation.Season
-import com.angiuprojects.gamecatalog.entities.implementation.TVShow
 import com.angiuprojects.gamecatalog.enums.MangaStatusEnum
 import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
 import com.google.android.material.snackbar.Snackbar
@@ -95,18 +89,20 @@ class Utils {
                                   snackBarView: View,
                                   showTypeEnum: ShowTypeEnum,
                                   parentMainItem: MainItem?,
+                                  parentAnime: Anime?,
                                   parentRecyclerAdapter: MainItemRecyclerAdapter?,
+                                  animeRecyclerAdapter: AnimeRecyclerAdapter?,
                                   position: Int?,
-                                  parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
-                                  animeRecyclerAdapter: AnimeRecyclerAdapter?) {
+                                  parentViewHolder: FatherRecyclerAdapter.MainItemViewHolder?) {
 
         val popUpView = openAddEditSeasonPopUp(dialog, buildString {
             append("Stagione ")
             append(seasons.size + 1)
         })
 
-        popUpView.findViewById<Button>(R.id.add_season).setOnClickListener{ onClickAddSeason(popUpView, dialog, seasons, recyclerView, snackBarView,
-            parentMainItem, parentRecyclerAdapter, position, parentViewHolder, showTypeEnum) }
+        popUpView.findViewById<Button>(R.id.add_season).setOnClickListener{ onClickAddSeason(popUpView,
+            dialog, seasons, recyclerView, snackBarView, parentMainItem, parentAnime, parentRecyclerAdapter,
+            animeRecyclerAdapter, position, parentViewHolder, showTypeEnum) }
     }
 
     fun openAddEditSeasonPopUp(dialog: Dialog, seasonName: String) : View {
@@ -129,9 +125,11 @@ class Utils {
                                  recyclerView: RecyclerView,
                                  snackBarView: View,
                                  parentMainItem: MainItem?,
+                                 parentAnime: Anime?,
                                  parentRecyclerAdapter: MainItemRecyclerAdapter?,
+                                 animeRecyclerAdapter: AnimeRecyclerAdapter?,
                                  position: Int?,
-                                 parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
+                                 parentViewHolder: FatherRecyclerAdapter.MainItemViewHolder?,
                                  showTypeEnum: ShowTypeEnum
     ) {
 
@@ -155,8 +153,8 @@ class Utils {
         seasons.sortedBy { it.name }
         parentMainItem?.seasons = seasons.sortedBy { it.name }.toMutableList()
 
-        setSeasonRecyclerAdapter(seasons, dialog.context, recyclerView, parentMainItem,
-            parentRecyclerAdapter, position, parentViewHolder, showTypeEnum)
+        setSeasonRecyclerAdapter(seasons, dialog.context, recyclerView, parentMainItem, parentAnime,
+            parentRecyclerAdapter, animeRecyclerAdapter, position, parentViewHolder, showTypeEnum)
         dialog.dismiss()
     }
 
@@ -164,9 +162,11 @@ class Utils {
                                          context: Context,
                                          recyclerView: RecyclerView,
                                          parentMainItem: MainItem?,
+                                         parentAnime: Anime?,
                                          parentRecyclerAdapter: MainItemRecyclerAdapter?,
+                                         animeRecyclerAdapter: AnimeRecyclerAdapter?,
                                          position: Int?,
-                                         parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder?,
+                                         parentViewHolder: FatherRecyclerAdapter.MainItemViewHolder?,
                                          showTypeEnum: ShowTypeEnum
     ) {
 
@@ -175,12 +175,18 @@ class Utils {
 
         recyclerView.setHasFixedSize(true)
 
-        if(parentMainItem != null
-            && parentRecyclerAdapter != null
-            && position != null
+        if(position != null
             && parentViewHolder != null) {
-            recyclerView.adapter = SeasonRecyclerAdapter(parentMainItem, parentRecyclerAdapter, position, parentViewHolder, context, showTypeEnum)
-            parentRecyclerAdapter.updateCompletedSeasons(parentViewHolder, parentMainItem.seasons)
+            if(parentRecyclerAdapter != null && parentMainItem != null) {
+                recyclerView.adapter = SeasonRecyclerAdapter(parentMainItem, parentRecyclerAdapter,
+                    position, parentViewHolder, context, showTypeEnum)
+                parentRecyclerAdapter.updateCompletedSeasons(parentViewHolder, parentMainItem.seasons)
+            } else if(animeRecyclerAdapter != null && parentAnime != null) {
+                recyclerView.adapter = AnimeSeasonRecyclerAdapter(parentAnime, animeRecyclerAdapter,
+                    position, parentViewHolder, context)
+                animeRecyclerAdapter.updateCompletedSeasons(parentViewHolder, parentAnime)
+            }
+
         }
         else recyclerView.adapter = AddSeasonRecyclerAdapter(seasons)
 

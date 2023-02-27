@@ -25,10 +25,10 @@ import com.angiuprojects.gamecatalog.utilities.SeasonAdapterUtils
 import com.angiuprojects.gamecatalog.utilities.Utils
 
 class AnimeSeasonRecyclerAdapter (private val parent: Anime,
-                                 private val parentRecyclerAdapter: AnimeRecyclerAdapter,
-                                 private val position: Int,
-                                 private val parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder,
-                                 private val context: Context
+                                  private val parentRecyclerAdapter: AnimeRecyclerAdapter,
+                                  private val position: Int,
+                                  private val parentViewHolder: FatherRecyclerAdapter.MainItemViewHolder,
+                                  private val context: Context
 ): RecyclerView.Adapter<SeasonRecyclerAdapter.SeasonViewHolder>()  {
 
     private var dataSet: MutableList<Season> = parent.sagas[0].seasons
@@ -124,10 +124,11 @@ class AnimeSeasonRecyclerAdapter (private val parent: Anime,
                     holder.itemView.rootView.findViewById(android.R.id.content),
                     ShowTypeEnum.ANIME,
                     parent.sagas[0],
+                    parent,
                     null,
+                    parentRecyclerAdapter,
                     position,
-                    parentViewHolder,
-                    parentRecyclerAdapter)
+                    parentViewHolder)
                 updateParent()
             }
             return
@@ -180,7 +181,7 @@ class AnimeSeasonRecyclerAdapter (private val parent: Anime,
                 )
             }
         } catch (e: Exception) {
-            Log.e(Constants.logger, "I dati sono errati!")
+            Log.e(Constants.logger, context.getString(R.string.dati_errati))
         }
     }
 

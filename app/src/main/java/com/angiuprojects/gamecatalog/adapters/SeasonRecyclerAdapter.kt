@@ -21,7 +21,7 @@ import com.angiuprojects.gamecatalog.utilities.*
 open class SeasonRecyclerAdapter(private val parent: MainItem,
                                  private val parentRecyclerAdapter: MainItemRecyclerAdapter,
                                  private val position: Int,
-                                 private val parentViewHolder: MainItemRecyclerAdapter.MainItemViewHolder,
+                                 private val parentViewHolder: FatherRecyclerAdapter.MainItemViewHolder,
                                  private val context: Context,
                                  private val showTypeEnum: ShowTypeEnum
 ): RecyclerView.Adapter<SeasonRecyclerAdapter.SeasonViewHolder>()  {
@@ -90,7 +90,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
 
             when(action) {
                 PopUpActionsEnum.DELETE_SHOW -> parentRecyclerAdapter.deleteItem(parentPosition)
-                PopUpActionsEnum.DELETE_SEASON -> parentRecyclerAdapter.deleteLastSeason(parentPosition, parentViewHolder)
+                PopUpActionsEnum.DELETE_SEASON -> parentRecyclerAdapter.deleteLastSeason(parentPosition)
             }
             dialog.dismiss()
         }
@@ -136,10 +136,11 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
                         holder.itemView.rootView.findViewById(android.R.id.content),
                         showTypeEnum,
                         parent,
+                        null,
                         parentRecyclerAdapter,
+                        null,
                         position,
-                        parentViewHolder,
-                        null)
+                        parentViewHolder)
                 updateParent()
             }
             return
@@ -192,7 +193,7 @@ open class SeasonRecyclerAdapter(private val parent: MainItem,
                 )
             }
         } catch (e: Exception) {
-            Log.e(Constants.logger, "I dati sono errati!")
+            Log.e(Constants.logger, context.getString(R.string.dati_errati))
         }
     }
 
