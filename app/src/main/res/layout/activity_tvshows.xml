@@ -19,12 +19,15 @@
         android:textAllCaps="true" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tv_show_recycler_view"
+        android:id="@+id/shows_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
         android:layout_above="@+id/add_button"
-        android:layout_margin="20dp"/>
+        android:layout_below="@+id/horizontal_recycler_view"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp" />
 
     <ImageButton
         android:id="@+id/add_button"
@@ -38,5 +41,26 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/icons8_add_new_100"
         android:backgroundTint="@drawable/change_color" />
+
+    <ImageButton
+        android:id="@+id/filter_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/icons8_alphabetical_sorting_64"
+        android:backgroundTint="@drawable/change_color" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontal_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_below="@id/filter_button"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone"/>
 
 </RelativeLayout>

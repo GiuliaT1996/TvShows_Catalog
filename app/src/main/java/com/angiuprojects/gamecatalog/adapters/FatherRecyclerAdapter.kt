@@ -22,7 +22,7 @@ import java.util.function.BiConsumer
 import java.util.function.Function
 import kotlin.reflect.KMutableProperty1
 
-open class FatherRecyclerAdapter<T> (private val dataSet: MutableList<out T>,
+open class FatherRecyclerAdapter<T> (private var dataSet: MutableList<out T>,
                                      val fatherContext: Context)
     : RecyclerView.Adapter<FatherRecyclerAdapter.MainItemViewHolder>() {
 
@@ -112,6 +112,11 @@ open class FatherRecyclerAdapter<T> (private val dataSet: MutableList<out T>,
         this.notifyItemChanged(position)
         ReadWriteJson.getInstance().write(fatherContext, false)
         dialog.dismiss()
+    }
+
+    fun updateDataset(newDataSet: MutableList<out T>){
+        dataSet = newDataSet
+        notifyDataSetChanged()
     }
 
     fun deleteItem(position: Int) {

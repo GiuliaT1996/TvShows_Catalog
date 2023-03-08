@@ -1,7 +1,9 @@
 package com.angiuprojects.gamecatalog.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.ImageButton
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.angiuprojects.gamecatalog.R
 import com.angiuprojects.gamecatalog.enums.ShowTypeEnum
@@ -13,6 +15,14 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         setOnClickMethods()
+
+        val context: Context = this
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                ReadWriteJson.getInstance().write(context, false)
+                finish()
+            }
+        })
     }
 
     private fun setOnClickMethods() {
@@ -32,11 +42,5 @@ class MenuActivity : AppCompatActivity() {
     override fun onStop() {
         ReadWriteJson.getInstance().write(this, false)
         super.onStop()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        ReadWriteJson.getInstance().write(this, false)
-        finish()
     }
 }
