@@ -14,11 +14,15 @@ class MangaActivity : ShowsOpenActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manga)
 
-        Constants.user?.mangaList = setShowsRecyclerView(User::mangaList, Manga::name, ShowTypeEnum.MANGA)
+        Constants.user?.mangaList = setShowsRecyclerView(User::mangaList, Manga::name,
+            ShowTypeEnum.MANGA)
         onClickStartAddActivity(ShowTypeEnum.MANGA)
 
         findViewById<ImageButton>(R.id.filter_button).setOnClickListener {
-            setAlphabetRecyclerAdapter(Constants.user!!.mangaList, this, this, ShowTypeEnum.MANGA)
+            val toReset = setAlphabetRecyclerAdapter(Constants.user!!.mangaList, this,
+                this, ShowTypeEnum.MANGA)
+            if(toReset) Constants.user?.mangaList = setShowsRecyclerView(User::mangaList,
+                Manga::name, ShowTypeEnum.MANGA)
         }
     }
 

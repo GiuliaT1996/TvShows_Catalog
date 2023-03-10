@@ -14,12 +14,16 @@ class AnimeActivity : ShowsOpenActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime)
 
-        Constants.user?.animeList = setShowsRecyclerView(User::animeList, Anime::name, ShowTypeEnum.ANIME)
+        Constants.user?.animeList = setShowsRecyclerView(User::animeList, Anime::name,
+            ShowTypeEnum.ANIME)
 
         onClickStartAddActivity(ShowTypeEnum.ANIME)
 
         findViewById<ImageButton>(R.id.filter_button).setOnClickListener {
-            setAlphabetRecyclerAdapter(Constants.user!!.animeList, this, this, ShowTypeEnum.ANIME)
+            val toReset = setAlphabetRecyclerAdapter(Constants.user!!.animeList, this,
+                this, ShowTypeEnum.ANIME)
+            if(toReset) Constants.user?.animeList = setShowsRecyclerView(User::animeList,
+                Anime::name, ShowTypeEnum.ANIME)
         }
     }
 }

@@ -14,11 +14,15 @@ class TVShowsActivity : ShowsOpenActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tvshows)
 
-        Constants.user?.tvShowList = setShowsRecyclerView(User::tvShowList, TVShow::name, ShowTypeEnum.TV_SHOW)
+        Constants.user?.tvShowList = setShowsRecyclerView(User::tvShowList, TVShow::name,
+            ShowTypeEnum.TV_SHOW)
         onClickStartAddActivity(ShowTypeEnum.TV_SHOW)
 
         findViewById<ImageButton>(R.id.filter_button).setOnClickListener {
-            setAlphabetRecyclerAdapter(Constants.user!!.tvShowList, this, this, ShowTypeEnum.TV_SHOW)
+            val toReset = setAlphabetRecyclerAdapter(Constants.user!!.tvShowList, this,
+                this, ShowTypeEnum.TV_SHOW)
+            if(toReset) Constants.user?.tvShowList = setShowsRecyclerView(User::tvShowList,
+                    TVShow::name, ShowTypeEnum.TV_SHOW)
         }
     }
 }

@@ -26,11 +26,11 @@ open class ShowsOpenActivity : AppCompatActivity() {
     fun setAlphabetRecyclerAdapter(listToFilter : MutableList<*>,
                                    activity: ShowsOpenActivity,
                                    context: Context,
-                                   showTypeEnum: ShowTypeEnum) {
+                                   showTypeEnum: ShowTypeEnum) : Boolean {
         val recyclerView = findViewById<RecyclerView>(R.id.horizontal_recycler_view)
         if(recyclerView.visibility == View.VISIBLE) {
             recyclerView.visibility = View.GONE
-            return
+            return true
         }
         recyclerView.visibility = View.VISIBLE
         val adapter = AlphabetFilterRecyclerAdapter(alphabet, listToFilter, activity, showTypeEnum)
@@ -40,6 +40,7 @@ open class ShowsOpenActivity : AppCompatActivity() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
+        return false
     }
 
     fun <T> setShowsRecyclerView(listGetter: java.util.function.Function<User, MutableList<T>>,
@@ -61,7 +62,7 @@ open class ShowsOpenActivity : AppCompatActivity() {
 
     fun <T> setFilteredRecyclerView(list: MutableList<T>, showTypeEnum: ShowTypeEnum) {
         val recyclerView = findViewById<RecyclerView>(R.id.shows_recycler_view)
-        if(!(showTypeEnum == ShowTypeEnum.ANIME)) {
+        if(showTypeEnum != ShowTypeEnum.ANIME) {
             Utils.getInstance().setMainItemRecyclerAdapter(
                 list as MutableList<out MainItem>, this,
                 recyclerView, showTypeEnum)
@@ -70,14 +71,14 @@ open class ShowsOpenActivity : AppCompatActivity() {
     }
 
     fun onClickStartAddActivity(showTypeEnum: ShowTypeEnum) {
-        findViewById<ImageButton>(R.id.add_button).setOnClickListener{
+        findViewById<ImageButton>(R.id.add_button).setOnClickListener {
             Utils.getInstance().onClickChangeActivity(
                 AddActivity::class.java, this, true, showTypeEnum.type)}
     }
 
     private fun setAnimeRecyclerAdapter(itemList: MutableList<Anime>,
-                                   context: Context,
-                                   recyclerView: RecyclerView
+                                        context: Context,
+                                        recyclerView: RecyclerView
     ) {
 
         val adapter = AnimeRecyclerAdapter(itemList, context)
